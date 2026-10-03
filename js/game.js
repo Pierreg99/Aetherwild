@@ -267,6 +267,10 @@
     if (w.rules && w.rules.lockSwitch) pushLog('Only the forward Resonant may sing.');
     if (w.rules && w.rules.reliefAtHalf) pushLog('A wounded Resonant may withdraw.');
     if (w.rules && w.rules.primaryLock) pushLog('This Sanctum hears only your own Harmonic.');
+    if (w.rules && w.rules.phraseLimit) pushLog('Finish within ' + w.rules.phraseLimit + ' phrases.');
+    if (w.rules && w.rules.kindlingOnly) pushLog('Only Kindling is heard.');
+    if (w.rules && w.rules.rotate) pushLog('After you sing, call a different Resonant.');
+    if (w.rules && w.rules.openingSoften) pushLog('The first phrase lands softly.');
     screen = 'battle';
     dockSig = '';
   }

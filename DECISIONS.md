@@ -12,13 +12,13 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 - Records stay in `localStorage`. A record that fails to parse is copied aside and is not required to be deleted before a new survey.
 - Choir size is 4, plus one reserve seat, because that was the slice contract. The brief's Choir of 6 is still not the cap.
 - Nine Harmonics. The chart is a circulant over all nine: strong against the next two, weakness derived. Extending the cycle changed which pairs Stratum and Draft answer. That is intentional.
-- Twenty-one Resonants and thirty-six Motifs. Four zones: Lumenfall Yard, Brine Marches, Stratum Cut, Spark Ridge. Four Sanctums with different trials: an open phrase, a forward-only phrase, withdrawal under half Vigor, and a phrase that refuses any Harmonic but the forward Resonant's own.
+- Seventy-eight Resonants and thirty-six Motifs. Eight zones on foot: Lumenfall Yard, Brine Marches, Stratum Cut, Spark Ridge, Gloom Fen, Biteroot Thorn, Draft Shelf, Rivet Foundry. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
 
 ## Not built yet
 
-- Index size 78 and Motif count 120. Fifty-seven Resonants and eighty-four Motifs are still missing. Only three Resonants have an Ascension, and none have a third stage.
+- Motif count is 36, not 120. Eighty-four Motifs are still missing. Only three Resonants have an Ascension, and none have a third stage.
 - Level cap is 20, not 50.
-- Four Sanctums remain, including the Chorus and the Prime Voice. Five biomes from a set of nine are still absent.
+- The Chorus and the Prime Voice are not built. A ninth zone is not built. Level cap stays 20.
 - A Resonance Vault larger than one reserve seat. Letting a hum go is permanent in this slice.
 - Secondary Harmonics, status phrases (Dimmed, Riven, Brambled, Scorched), stat stages, and Cadence-empty substitution beyond a hard refusal.
 - The brief's contradictory Ward line that reads the attacker's Ward. Incoming Ward from section 1.4 is what the slice multiplies.
@@ -34,4 +34,4 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 
 ## Later
 
-The remaining Sanctums, the rest of the Index, status phrases, and the toolchain gates are still open. Do not mark them done until they are playable.
+The Chorus, the Prime Voice, third-stage Ascension, shops, the level cap of 50, the remaining Motifs, and the toolchain gates are still open. Do not mark them done until they are playable.

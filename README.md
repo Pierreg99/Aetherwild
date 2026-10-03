@@ -28,7 +28,7 @@ There is no build step. `index.html` loads plain scripts. Use a local server bec
 - The Choir holds four Resonants. One more can wait in reserve.
 - The lamp tile restores Vigor and Cadence.
 - Warden Solm keeps the Sanctum in Lumenfall Yard. A win and a loss are both shown. After the first win, the Conductor speaks, and the east gate opens.
-- Brine Marches, Stratum Cut, and Spark Ridge follow. Each Sanctum is a different trial: only the forward Resonant, withdrawal under half Vigor, or a phrase that accepts only that Resonant's own Harmonic. West gates go back. East gates stay shut until the local Sanctum is answered.
+- Brine Marches, Stratum Cut, Spark Ridge, Gloom Fen, Biteroot Thorn, Draft Shelf, and Rivet Foundry follow. Each Sanctum is a different trial: forward Resonant only, withdrawal under half Vigor, own Harmonic only, an eight-phrase limit, Kindling only, a required Choir rotation, or a softened first phrase. West gates go back. East gates stay shut until the local Sanctum is answered.
 
 Brinember, Mortide, and Veshcrag can ascend after Choir level 16 and Resonance 120, if their extra condition is met: a bond peak, five Kindling Motifs, or never having gone quiet. The Index shows those lines as unwritten until then.
 

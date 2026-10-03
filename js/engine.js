@@ -336,7 +336,7 @@
     return best;
   }
 
-  function strike(save, attacker, defender, motifId, logs) {
+  function strike(save, attacker, defender, motifId, logs, scale) {
     const m = motif(motifId);
     if (!spend(attacker, motifId)) {
       logs.push(displayName(attacker) + ' has no Cadence for ' + (m ? m.name : 'that Motif') + '.');
@@ -352,7 +352,8 @@
       return;
     }
     const roll = pull(save);
-    const dmg = computeDamage(attacker, defender, m, roll);
+    let dmg = computeDamage(attacker, defender, m, roll);
+    if (scale && scale !== 1) dmg = Math.max(1, Math.floor(dmg * scale));
     defender.vigor = Math.max(0, defender.vigor - dmg);
     const felt = multiplier(m.harmonic, species(defender.speciesId).primary) * normalizeWard(defender.ward)[m.harmonic];
     let line = displayName(attacker) + ' plays ' + m.name + '. ' + displayName(defender) + ' loses ' + dmg + ' Vigor.';
@@ -453,8 +454,13 @@
         logs.push('Call another Resonant.');
         return logs;
       }
+      if (battle.rules && battle.rules.rotate && action.index === battle.rotateFrom) {
+        logs.push('This Sanctum wants a different voice.');
+        return logs;
+      }
       if (!switchTo(save, action.index, logs)) return logs;
       battle.mustSwitch = false;
+      battle.rotateFrom = null;
       return logs;
     }
 
@@ -556,11 +562,15 @@
         if (order[i] === 'player') {
           if (p.vigor <= 0) continue;
           const target = foe(battle);
-          if (battle.rules && battle.rules.primaryLock && m.harmonic !== species(p.speciesId).primary) {
+          if (battle.rules && battle.rules.kindlingOnly && m.cls !== 'Kindling') {
+            spend(p, action.motifId);
+            logs.push('This Sanctum hears only Kindling.');
+          } else if (battle.rules && battle.rules.primaryLock && m.harmonic !== species(p.speciesId).primary) {
             spend(p, action.motifId);
             logs.push('The Sanctum refuses ' + m.name + '.');
           } else {
-            strike(save, p, target, action.motifId, logs);
+            const scale = battle.rules && battle.rules.openingSoften && battle.phrases === 1 ? 0.5 : 1;
+            strike(save, p, target, action.motifId, logs, scale);
             if (target.vigor <= 0) onFoeDown(save, battle, logs);
             else maybeRelief(battle, target, logs);
           }
@@ -569,6 +579,16 @@
         }
       }
       battle.entered = false;
+      if (battle.result === 'ongoing' && battle.rules && battle.rules.rotate && livingIndexes(save).length > 1) {
+        battle.mustSwitch = true;
+        battle.rotateFrom = save.active;
+        logs.push('The Sanctum asks for another voice.');
+      }
+      if (battle.result === 'ongoing' && battle.rules && battle.rules.phraseLimit && battle.phrases >= battle.rules.phraseLimit) {
+        battle.result = 'loss';
+        save.flags.losses += 1;
+        logs.push('The Sanctum closes. The phrase was too long.');
+      }
       if (battle.result === 'ongoing' && battle.phrases >= 200) {
         const p = active(save);
         const f = foe(battle);

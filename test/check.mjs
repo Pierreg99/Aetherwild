@@ -146,9 +146,9 @@ assert(data.ZONES.yard.map.some((row) => row.includes('S')), 'sanctum exists');
 for (const slot of data.WARDENS.solm.team) assert(engine.species(slot.speciesId), 'warden species');
 
 assert(data.HARMONICS.length === 9, 'nine harmonics');
-assert(data.RESONANTS.length >= 18, 'expanded roster');
-assert(Object.keys(data.ZONES).length >= 4, 'four zones');
-assert(Object.keys(data.WARDENS).length >= 4, 'four sanctums');
+assert(data.RESONANTS.length === 78, 'index holds 78 resonants');
+assert(Object.keys(data.ZONES).length === 8, 'eight zones');
+assert(Object.keys(data.WARDENS).length === 8, 'eight sanctums');
 for (const zone of Object.values(data.ZONES)) {
   const width = zone.map[0].length;
   for (const row of zone.map) assert(row.length === width, zone.id + ' row width');
@@ -190,6 +190,100 @@ const refuseBattle = engine.createBattle([calm], 'warden', 'odel', { primaryLock
 const refuseLogs = engine.stepBattle(refused, refuseBattle, { type: 'motif', motifId: 'tide-murmur' });
 assert(refuseLogs.some((line) => line.indexOf('refuses') !== -1), 'sanctum refuses another harmonic');
 assert(calm.vigor === 80, 'refused motif deals no vigor loss');
+
+const reach = new Set(['yard']);
+const queue = ['yard'];
+while (queue.length) {
+  const id = queue.pop();
+  const links = data.ZONES[id].links;
+  for (const dest of Object.values(links)) {
+    if (dest && !reach.has(dest)) {
+      reach.add(dest);
+      queue.push(dest);
+    }
+  }
+}
+for (const id of Object.keys(data.ZONES)) assert(reach.has(id), id + ' is reachable on foot');
+const ruleKeys = Object.values(data.WARDENS).map((w) => JSON.stringify(w.rules));
+assert(new Set(ruleKeys).size === ruleKeys.length, 'each sanctum trial is distinct');
+
+const capSave = engine.freshSave('Surveyor', 'brinember', 31);
+capSave.choir[0].stats.tempo = 900;
+capSave.choir[0].vigor = 400;
+capSave.choir[0].stats.vigor = 400;
+const tank = engine.makeInstance(capSave, 'pellslab', 4);
+tank.stats.tempo = 1;
+tank.stats.edge = 99999;
+tank.stats.guard = 99999;
+tank.vigor = 500;
+tank.stats.vigor = 500;
+const capBattle = engine.createBattle([tank], 'warden', 'ulm', { phraseLimit: 8 });
+capBattle.phrases = 7;
+engine.stepBattle(capSave, capBattle, { type: 'motif', motifId: capSave.choir[0].knownMotifs[0] });
+assert(capBattle.result === 'loss', 'a phrase past the limit is a loss');
+const quick = engine.freshSave('Surveyor', 'brinember', 32);
+quick.choir[0].stats.tempo = 900;
+const frail = engine.makeInstance(quick, 'draygust', 2);
+frail.vigor = 1;
+frail.stats.tempo = 1;
+const quickBattle = engine.createBattle([frail], 'warden', 'ulm', { phraseLimit: 8 });
+engine.stepBattle(quick, quickBattle, { type: 'motif', motifId: 'flare-lattice' });
+assert(quickBattle.result === 'win', 'a short phrase can still clear the limit');
+
+const kindSave = engine.freshSave('Surveyor', 'brinember', 33);
+kindSave.choir[0].stats.tempo = 900;
+const kindFoe = engine.makeInstance(kindSave, 'veshcrag', 4);
+kindFoe.stats.tempo = 1;
+kindFoe.vigor = 80;
+const kindBattle = engine.createBattle([kindFoe], 'warden', 'zeph', { kindlingOnly: true });
+const heavy = engine.stepBattle(kindSave, kindBattle, { type: 'motif', motifId: 'flare-lattice' });
+assert(heavy.some((line) => line.indexOf('Kindling') !== -1), 'heavy motif is refused');
+assert(kindFoe.vigor === 80, 'refused kindling rule deals none');
+const spark = engine.freshSave('Surveyor', 'brinember', 34);
+spark.choir[0].stats.tempo = 900;
+const sparkFoe = engine.makeInstance(spark, 'veshcrag', 4);
+sparkFoe.stats.tempo = 1;
+sparkFoe.vigor = 80;
+const sparkBattle = engine.createBattle([sparkFoe], 'warden', 'zeph', { kindlingOnly: true });
+engine.stepBattle(spark, sparkBattle, { type: 'motif', motifId: 'hush-ember' });
+assert(sparkFoe.vigor < 80, 'kindling still lands');
+
+const rot = engine.freshSave('Surveyor', 'brinember', 35);
+rot.choir.push(engine.makeInstance(rot, 'mortide', 6));
+rot.choir[0].stats.tempo = 900;
+rot.choir[0].vigor = 200;
+rot.choir[0].stats.vigor = 200;
+const rotFoe = engine.makeInstance(rot, 'pellslab', 3);
+rotFoe.stats.tempo = 1;
+rotFoe.stats.edge = 99999;
+rotFoe.vigor = 400;
+rotFoe.stats.vigor = 400;
+const rotBattle = engine.createBattle([rotFoe], 'warden', 'karu', { rotate: true });
+engine.stepBattle(rot, rotBattle, { type: 'motif', motifId: rot.choir[0].knownMotifs[0] });
+assert(rotBattle.mustSwitch === true, 'rotation asks for another voice');
+const same = engine.stepBattle(rot, rotBattle, { type: 'switch', index: 0 });
+assert(same.some((line) => line.indexOf('different voice') !== -1), 'same voice is refused');
+assert(rotBattle.mustSwitch === true, 'rotation stays open');
+engine.stepBattle(rot, rotBattle, { type: 'switch', index: 1 });
+assert(rotBattle.mustSwitch === false, 'a different voice satisfies rotation');
+
+function firstHit(rules) {
+  const s = engine.freshSave('Surveyor', 'brinember', 36);
+  s.choir[0].stats.tempo = 900;
+  const f = engine.makeInstance(s, 'veshcrag', 5);
+  f.stats.tempo = 1;
+  f.vigor = 200;
+  const b = engine.createBattle([f], 'warden', 'tal', rules);
+  const logs = engine.stepBattle(s, b, { type: 'motif', motifId: 'ember-ring' });
+  const line = logs.find((entry) => entry.indexOf('loses') !== -1);
+  const n = Number(line.match(/loses (\d+)/)[1]);
+  return n;
+}
+const openHit = firstHit(null);
+const softHit = firstHit({ openingSoften: true });
+assert(softHit < openHit, 'opening phrase is softer');
+assert(softHit >= 1, 'soft phrase still lands');
+
 
 
 

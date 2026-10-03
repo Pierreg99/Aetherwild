@@ -254,6 +254,519 @@
       flavor: 'The mesa has set. Light runs in a straight seam through the stone.',
       habitat: [],
       fromAscension: true
+    },
+    {
+      id: 'brinveshember', name: 'Brinveshember', primary: 'Cindersong', secondary: null,
+      rarity: 'rare', plan: 'crystalline', artSeed: 30011, pitch: 'Low',
+      baseStats: { vigor: 136, focus: 41, guard: 39, spirit: 44, edge: 36, tempo: 34 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'ember-ring'],
+      flavor: 'A crystalline body that keeps a Cindersong hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'talpellmelt', name: 'Talpellmelt', primary: 'Brine', secondary: null,
+      rarity: 'common', plan: 'orbiting', artSeed: 30108, pitch: 'Mid',
+      baseStats: { vigor: 111, focus: 44, guard: 44, spirit: 51, edge: 40, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'tide-murmur'],
+      flavor: 'A orbiting body that keeps a Brine hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'mormyrrslab', name: 'Mormyrrslab', primary: 'Stratum', secondary: null,
+      rarity: 'common', plan: 'tidal', artSeed: 30205, pitch: 'High',
+      baseStats: { vigor: 86, focus: 47, guard: 49, spirit: 58, edge: 44, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'flare-lattice', 'melt-ribbon'],
+      flavor: 'A tidal body that keeps a Stratum hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'veshthurgust', name: 'Veshthurgust', primary: 'Draft', secondary: null,
+      rarity: 'uncommon', plan: 'laminar', artSeed: 30302, pitch: 'Low',
+      baseStats: { vigor: 71, focus: 50, guard: 54, spirit: 65, edge: 48, tempo: 52 },
+      baseWard: { Cindersong: 0.75, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1.4, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'drown-glass'],
+      flavor: 'A laminar body that keeps a Draft hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'kaldrayhollow', name: 'Kaldrayhollow', primary: 'Gloom', secondary: null,
+      rarity: 'common', plan: 'geomorphic', artSeed: 30399, pitch: 'Mid',
+      baseStats: { vigor: 72, focus: 53, guard: 59, spirit: 72, edge: 52, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 0.75, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1.4, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'brine-lens'],
+      flavor: 'A geomorphic body that keeps a Gloom hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'oruoskfrond', name: 'Oruoskfrond', primary: 'Biteroot', secondary: null,
+      rarity: 'common', plan: 'lattice', artSeed: 30496, pitch: 'High',
+      baseStats: { vigor: 73, focus: 56, guard: 64, spirit: 79, edge: 56, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 0.75, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1.4 },
+      learnset: ['hush-ember', 'flare-lattice', 'crag-hum'],
+      flavor: 'A lattice body that keeps a Biteroot hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'draysolmbolt', name: 'Draysolmbolt', primary: 'Rivet', secondary: null,
+      rarity: 'uncommon', plan: 'filament', artSeed: 30593, pitch: 'Low',
+      baseStats: { vigor: 74, focus: 59, guard: 69, spirit: 46, edge: 60, tempo: 34 },
+      baseWard: { Cindersong: 1.4, Brine: 1, Stratum: 1, Draft: 0.75, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'slab-press'],
+      flavor: 'A filament body that keeps a Rivet hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'lummorflick', name: 'Lummorflick', primary: 'Spark', secondary: null,
+      rarity: 'rare', plan: 'coiled', artSeed: 30690, pitch: 'Mid',
+      baseStats: { vigor: 75, focus: 62, guard: 40, spirit: 53, edge: 64, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1.4, Stratum: 1, Draft: 1, Gloom: 0.75, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'stone-choir'],
+      flavor: 'A coiled body that keeps a Spark hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'sevnixablight', name: 'Sevnixablight', primary: 'Bile', secondary: null,
+      rarity: 'common', plan: 'bloom', artSeed: 30787, pitch: 'High',
+      baseStats: { vigor: 78, focus: 65, guard: 45, spirit: 60, edge: 36, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1.4, Draft: 1, Gloom: 1, Biteroot: 0.75, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'crag-bind'],
+      flavor: 'A bloom body that keeps a Bile hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'nixazephember', name: 'Nixazephember', primary: 'Cindersong', secondary: null,
+      rarity: 'uncommon', plan: 'porous', artSeed: 30884, pitch: 'Low',
+      baseStats: { vigor: 77, focus: 68, guard: 50, spirit: 67, edge: 40, tempo: 52 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'gust-thread'],
+      flavor: 'A porous body that keeps a Cindersong hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'pellnyxmelt', name: 'Pellnyxmelt', primary: 'Brine', secondary: null,
+      rarity: 'common', plan: 'colonial', artSeed: 30981, pitch: 'Mid',
+      baseStats: { vigor: 78, focus: 71, guard: 55, spirit: 74, edge: 44, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'veil-shear'],
+      flavor: 'A colonial body that keeps a Brine hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'gravoruslab', name: 'Gravoruslab', primary: 'Stratum', secondary: null,
+      rarity: 'common', plan: 'crystalline', artSeed: 31078, pitch: 'High',
+      baseStats: { vigor: 79, focus: 74, guard: 60, spirit: 81, edge: 48, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'flare-lattice', 'veil-rush'],
+      flavor: 'A crystalline body that keeps a Stratum hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'ulmoskveil', name: 'Ulmoskveil', primary: 'Draft', secondary: null,
+      rarity: 'uncommon', plan: 'orbiting', artSeed: 31175, pitch: 'Low',
+      baseStats: { vigor: 80, focus: 77, guard: 65, spirit: 48, edge: 52, tempo: 34 },
+      baseWard: { Cindersong: 0.75, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1.4, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'draft-needle'],
+      flavor: 'A orbiting body that keeps a Draft hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'oskkaruhollow', name: 'Oskkaruhollow', primary: 'Gloom', secondary: null,
+      rarity: 'common', plan: 'tidal', artSeed: 31272, pitch: 'Mid',
+      baseStats: { vigor: 81, focus: 43, guard: 70, spirit: 55, edge: 56, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 0.75, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1.4, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'dusk-whisper'],
+      flavor: 'A tidal body that keeps a Gloom hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'wyntalfrond', name: 'Wyntalfrond', primary: 'Biteroot', secondary: null,
+      rarity: 'rare', plan: 'laminar', artSeed: 31369, pitch: 'High',
+      baseStats: { vigor: 82, focus: 46, guard: 41, spirit: 62, edge: 60, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 0.75, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1.4 },
+      learnset: ['hush-ember', 'flare-lattice', 'shade-fold'],
+      flavor: 'A laminar body that keeps a Biteroot hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'ulmsevbolt', name: 'Ulmsevbolt', primary: 'Rivet', secondary: null,
+      rarity: 'uncommon', plan: 'geomorphic', artSeed: 31466, pitch: 'Low',
+      baseStats: { vigor: 83, focus: 49, guard: 46, spirit: 69, edge: 64, tempo: 52 },
+      baseWard: { Cindersong: 1.4, Brine: 1, Stratum: 1, Draft: 0.75, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'hollow-chord'],
+      flavor: 'A geomorphic body that keeps a Rivet hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'zephulmflick', name: 'Zephulmflick', primary: 'Spark', secondary: null,
+      rarity: 'common', plan: 'lattice', artSeed: 31563, pitch: 'Mid',
+      baseStats: { vigor: 84, focus: 52, guard: 51, spirit: 76, edge: 36, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 1.4, Stratum: 1, Draft: 1, Gloom: 0.75, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'dusk-ring'],
+      flavor: 'A lattice body that keeps a Spark hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'myrrodelblight', name: 'Myrrodelblight', primary: 'Bile', secondary: null,
+      rarity: 'common', plan: 'filament', artSeed: 31660, pitch: 'High',
+      baseStats: { vigor: 85, focus: 55, guard: 56, spirit: 83, edge: 40, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1.4, Draft: 1, Gloom: 1, Biteroot: 0.75, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'thorn-lull'],
+      flavor: 'A filament body that keeps a Bile hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'quinkalember', name: 'Quinkalember', primary: 'Cindersong', secondary: null,
+      rarity: 'uncommon', plan: 'coiled', artSeed: 31757, pitch: 'Low',
+      baseStats: { vigor: 86, focus: 58, guard: 61, spirit: 50, edge: 44, tempo: 34 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'bloom-latch'],
+      flavor: 'A coiled body that keeps a Cindersong hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'karugravmelt', name: 'Karugravmelt', primary: 'Brine', secondary: null,
+      rarity: 'common', plan: 'bloom', artSeed: 31854, pitch: 'Mid',
+      baseStats: { vigor: 68, focus: 61, guard: 66, spirit: 57, edge: 48, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'frond-rake'],
+      flavor: 'A bloom body that keeps a Brine hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'solmquinslab', name: 'Solmquinslab', primary: 'Stratum', secondary: null,
+      rarity: 'common', plan: 'porous', artSeed: 31951, pitch: 'High',
+      baseStats: { vigor: 69, focus: 64, guard: 71, spirit: 64, edge: 52, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'flare-lattice', 'thorn-bind'],
+      flavor: 'A porous body that keeps a Stratum hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'virebringust', name: 'Virebringust', primary: 'Draft', secondary: null,
+      rarity: 'rare', plan: 'colonial', artSeed: 32048, pitch: 'Low',
+      baseStats: { vigor: 70, focus: 67, guard: 42, spirit: 71, edge: 56, tempo: 52 },
+      baseWard: { Cindersong: 0.75, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1.4, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'bolt-hum'],
+      flavor: 'A colonial body that keeps a Draft hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'odellumhollow', name: 'Odellumhollow', primary: 'Gloom', secondary: null,
+      rarity: 'common', plan: 'crystalline', artSeed: 32145, pitch: 'Mid',
+      baseStats: { vigor: 71, focus: 70, guard: 47, spirit: 78, edge: 60, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 0.75, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1.4, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'rivet-press'],
+      flavor: 'A crystalline body that keeps a Gloom hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'nyxwynfrond', name: 'Nyxwynfrond', primary: 'Biteroot', secondary: null,
+      rarity: 'common', plan: 'orbiting', artSeed: 32242, pitch: 'High',
+      baseStats: { vigor: 72, focus: 73, guard: 52, spirit: 45, edge: 64, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 0.75, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1.4 },
+      learnset: ['hush-ember', 'flare-lattice', 'anvil-chord'],
+      flavor: 'A orbiting body that keeps a Biteroot hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'thurvirebolt', name: 'Thurvirebolt', primary: 'Rivet', secondary: null,
+      rarity: 'uncommon', plan: 'tidal', artSeed: 32339, pitch: 'Low',
+      baseStats: { vigor: 75, focus: 76, guard: 57, spirit: 52, edge: 36, tempo: 34 },
+      baseWard: { Cindersong: 1.4, Brine: 1, Stratum: 1, Draft: 0.75, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'bolt-shear'],
+      flavor: 'A tidal body that keeps a Rivet hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'brinveshflick', name: 'Brinveshflick', primary: 'Spark', secondary: null,
+      rarity: 'common', plan: 'laminar', artSeed: 32436, pitch: 'Mid',
+      baseStats: { vigor: 87, focus: 42, guard: 62, spirit: 59, edge: 40, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1.4, Stratum: 1, Draft: 1, Gloom: 0.75, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'arc-hum'],
+      flavor: 'A laminar body that keeps a Spark hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'talpellblight', name: 'Talpellblight', primary: 'Bile', secondary: null,
+      rarity: 'common', plan: 'geomorphic', artSeed: 32533, pitch: 'High',
+      baseStats: { vigor: 75, focus: 45, guard: 67, spirit: 66, edge: 44, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1.4, Draft: 1, Gloom: 1, Biteroot: 0.75, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'flick-lane'],
+      flavor: 'A geomorphic body that keeps a Bile hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'mormyrrember', name: 'Mormyrrember', primary: 'Cindersong', secondary: null,
+      rarity: 'uncommon', plan: 'lattice', artSeed: 32630, pitch: 'Low',
+      baseStats: { vigor: 76, focus: 48, guard: 72, spirit: 73, edge: 48, tempo: 52 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'charge-crown'],
+      flavor: 'A lattice body that keeps a Cindersong hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'veshthurmelt', name: 'Veshthurmelt', primary: 'Brine', secondary: null,
+      rarity: 'rare', plan: 'filament', artSeed: 32727, pitch: 'Mid',
+      baseStats: { vigor: 77, focus: 51, guard: 43, spirit: 80, edge: 52, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'arc-needle'],
+      flavor: 'A filament body that keeps a Brine hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'kaldrayslab', name: 'Kaldrayslab', primary: 'Stratum', secondary: null,
+      rarity: 'common', plan: 'coiled', artSeed: 32824, pitch: 'High',
+      baseStats: { vigor: 78, focus: 54, guard: 48, spirit: 47, edge: 56, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'flare-lattice', 'spore-hum'],
+      flavor: 'A coiled body that keeps a Stratum hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'oruoskgust', name: 'Oruoskgust', primary: 'Draft', secondary: null,
+      rarity: 'uncommon', plan: 'bloom', artSeed: 32921, pitch: 'Low',
+      baseStats: { vigor: 79, focus: 57, guard: 53, spirit: 54, edge: 60, tempo: 34 },
+      baseWard: { Cindersong: 0.75, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1.4, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'blight-seep'],
+      flavor: 'A bloom body that keeps a Draft hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'draysolmhollow', name: 'Draysolmhollow', primary: 'Gloom', secondary: null,
+      rarity: 'common', plan: 'porous', artSeed: 33018, pitch: 'Mid',
+      baseStats: { vigor: 80, focus: 60, guard: 58, spirit: 61, edge: 64, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 0.75, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1.4, Bile: 1 },
+      learnset: ['hush-ember', 'flare-lattice', 'venom-thread'],
+      flavor: 'A porous body that keeps a Gloom hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'lummorfrond', name: 'Lummorfrond', primary: 'Biteroot', secondary: null,
+      rarity: 'common', plan: 'colonial', artSeed: 33115, pitch: 'High',
+      baseStats: { vigor: 81, focus: 63, guard: 63, spirit: 68, edge: 36, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 0.75, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1.4 },
+      learnset: ['hush-ember', 'flare-lattice', 'spore-ring'],
+      flavor: 'A colonial body that keeps a Biteroot hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'sevnixabolt', name: 'Sevnixabolt', primary: 'Rivet', secondary: null,
+      rarity: 'uncommon', plan: 'crystalline', artSeed: 33212, pitch: 'Low',
+      baseStats: { vigor: 82, focus: 66, guard: 68, spirit: 75, edge: 40, tempo: 52 },
+      baseWard: { Cindersong: 1.4, Brine: 1, Stratum: 1, Draft: 0.75, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'ember-ring'],
+      flavor: 'A crystalline body that keeps a Rivet hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'nixazephflick', name: 'Nixazephflick', primary: 'Spark', secondary: null,
+      rarity: 'common', plan: 'orbiting', artSeed: 33309, pitch: 'Mid',
+      baseStats: { vigor: 83, focus: 69, guard: 39, spirit: 82, edge: 44, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 1.4, Stratum: 1, Draft: 1, Gloom: 0.75, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'tide-murmur'],
+      flavor: 'A orbiting body that keeps a Spark hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'pellnyxblight', name: 'Pellnyxblight', primary: 'Bile', secondary: null,
+      rarity: 'rare', plan: 'tidal', artSeed: 33406, pitch: 'High',
+      baseStats: { vigor: 84, focus: 72, guard: 44, spirit: 49, edge: 48, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1.4, Draft: 1, Gloom: 1, Biteroot: 0.75, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'melt-ribbon'],
+      flavor: 'A tidal body that keeps a Bile hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'gravoruember', name: 'Gravoruember', primary: 'Cindersong', secondary: null,
+      rarity: 'uncommon', plan: 'laminar', artSeed: 33503, pitch: 'Low',
+      baseStats: { vigor: 85, focus: 75, guard: 49, spirit: 56, edge: 52, tempo: 34 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'drown-glass'],
+      flavor: 'A laminar body that keeps a Cindersong hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'ulmoskdrown', name: 'Ulmoskdrown', primary: 'Brine', secondary: null,
+      rarity: 'common', plan: 'geomorphic', artSeed: 33600, pitch: 'Mid',
+      baseStats: { vigor: 86, focus: 41, guard: 54, spirit: 63, edge: 56, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'brine-lens'],
+      flavor: 'A geomorphic body that keeps a Brine hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'oskkaruslab', name: 'Oskkaruslab', primary: 'Stratum', secondary: null,
+      rarity: 'common', plan: 'lattice', artSeed: 33697, pitch: 'High',
+      baseStats: { vigor: 68, focus: 44, guard: 59, spirit: 70, edge: 60, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'coal-spiral', 'crag-hum'],
+      flavor: 'A lattice body that keeps a Stratum hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'wyntalgust', name: 'Wyntalgust', primary: 'Draft', secondary: null,
+      rarity: 'uncommon', plan: 'filament', artSeed: 33794, pitch: 'Low',
+      baseStats: { vigor: 69, focus: 47, guard: 64, spirit: 77, edge: 64, tempo: 52 },
+      baseWard: { Cindersong: 0.75, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1.4, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'slab-press'],
+      flavor: 'A filament body that keeps a Draft hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'ulmsevhollow', name: 'Ulmsevhollow', primary: 'Gloom', secondary: null,
+      rarity: 'common', plan: 'coiled', artSeed: 33891, pitch: 'Mid',
+      baseStats: { vigor: 73, focus: 50, guard: 69, spirit: 44, edge: 36, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 0.75, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1.4, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'stone-choir'],
+      flavor: 'A coiled body that keeps a Gloom hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'zephulmfrond', name: 'Zephulmfrond', primary: 'Biteroot', secondary: null,
+      rarity: 'common', plan: 'bloom', artSeed: 33988, pitch: 'High',
+      baseStats: { vigor: 82, focus: 53, guard: 40, spirit: 51, edge: 40, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 0.75, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1.4 },
+      learnset: ['hush-ember', 'coal-spiral', 'crag-bind'],
+      flavor: 'A bloom body that keeps a Biteroot hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'myrrodelbolt', name: 'Myrrodelbolt', primary: 'Rivet', secondary: null,
+      rarity: 'rare', plan: 'porous', artSeed: 34085, pitch: 'Low',
+      baseStats: { vigor: 93, focus: 56, guard: 45, spirit: 58, edge: 44, tempo: 34 },
+      baseWard: { Cindersong: 1.4, Brine: 1, Stratum: 1, Draft: 0.75, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'gust-thread'],
+      flavor: 'A porous body that keeps a Rivet hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'quinkalflick', name: 'Quinkalflick', primary: 'Spark', secondary: null,
+      rarity: 'common', plan: 'colonial', artSeed: 34182, pitch: 'Mid',
+      baseStats: { vigor: 73, focus: 59, guard: 50, spirit: 65, edge: 48, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1.4, Stratum: 1, Draft: 1, Gloom: 0.75, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'veil-shear'],
+      flavor: 'A colonial body that keeps a Spark hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'karugravblight', name: 'Karugravblight', primary: 'Bile', secondary: null,
+      rarity: 'common', plan: 'crystalline', artSeed: 34279, pitch: 'High',
+      baseStats: { vigor: 74, focus: 62, guard: 55, spirit: 72, edge: 52, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1.4, Draft: 1, Gloom: 1, Biteroot: 0.75, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'veil-rush'],
+      flavor: 'A crystalline body that keeps a Bile hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'solmquinember', name: 'Solmquinember', primary: 'Cindersong', secondary: null,
+      rarity: 'uncommon', plan: 'orbiting', artSeed: 34376, pitch: 'Low',
+      baseStats: { vigor: 75, focus: 65, guard: 60, spirit: 79, edge: 56, tempo: 52 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'draft-needle'],
+      flavor: 'A orbiting body that keeps a Cindersong hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'virebrinmelt', name: 'Virebrinmelt', primary: 'Brine', secondary: null,
+      rarity: 'common', plan: 'tidal', artSeed: 34473, pitch: 'Mid',
+      baseStats: { vigor: 76, focus: 68, guard: 65, spirit: 46, edge: 60, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'dusk-whisper'],
+      flavor: 'A tidal body that keeps a Brine hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'odellumslab', name: 'Odellumslab', primary: 'Stratum', secondary: null,
+      rarity: 'common', plan: 'laminar', artSeed: 34570, pitch: 'High',
+      baseStats: { vigor: 77, focus: 71, guard: 70, spirit: 53, edge: 64, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'coal-spiral', 'shade-fold'],
+      flavor: 'A laminar body that keeps a Stratum hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'nyxwyngust', name: 'Nyxwyngust', primary: 'Draft', secondary: null,
+      rarity: 'uncommon', plan: 'geomorphic', artSeed: 34667, pitch: 'Low',
+      baseStats: { vigor: 85, focus: 74, guard: 41, spirit: 60, edge: 36, tempo: 34 },
+      baseWard: { Cindersong: 0.75, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1.4, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'hollow-chord'],
+      flavor: 'A geomorphic body that keeps a Draft hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'thurvirehollow', name: 'Thurvirehollow', primary: 'Gloom', secondary: null,
+      rarity: 'rare', plan: 'lattice', artSeed: 34764, pitch: 'Mid',
+      baseStats: { vigor: 79, focus: 77, guard: 46, spirit: 67, edge: 40, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 0.75, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1.4, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'dusk-ring'],
+      flavor: 'A lattice body that keeps a Gloom hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'brinveshfrond', name: 'Brinveshfrond', primary: 'Biteroot', secondary: null,
+      rarity: 'common', plan: 'filament', artSeed: 34861, pitch: 'High',
+      baseStats: { vigor: 80, focus: 43, guard: 51, spirit: 74, edge: 44, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 0.75, Draft: 1, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1.4 },
+      learnset: ['hush-ember', 'coal-spiral', 'thorn-lull'],
+      flavor: 'A filament body that keeps a Biteroot hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'talpellbolt', name: 'Talpellbolt', primary: 'Rivet', secondary: null,
+      rarity: 'uncommon', plan: 'coiled', artSeed: 34958, pitch: 'Low',
+      baseStats: { vigor: 81, focus: 46, guard: 56, spirit: 81, edge: 48, tempo: 52 },
+      baseWard: { Cindersong: 1.4, Brine: 1, Stratum: 1, Draft: 0.75, Gloom: 1, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'bloom-latch'],
+      flavor: 'A coiled body that keeps a Rivet hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'mormyrrflick', name: 'Mormyrrflick', primary: 'Spark', secondary: null,
+      rarity: 'common', plan: 'bloom', artSeed: 35055, pitch: 'Mid',
+      baseStats: { vigor: 82, focus: 49, guard: 61, spirit: 48, edge: 52, tempo: 58 },
+      baseWard: { Cindersong: 1, Brine: 1.4, Stratum: 1, Draft: 1, Gloom: 0.75, Biteroot: 1, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'frond-rake'],
+      flavor: 'A bloom body that keeps a Spark hum in the fen.',
+      habitat: ['fen']
+    },
+    {
+      id: 'veshthurblight', name: 'Veshthurblight', primary: 'Bile', secondary: null,
+      rarity: 'common', plan: 'porous', artSeed: 35152, pitch: 'High',
+      baseStats: { vigor: 83, focus: 52, guard: 66, spirit: 55, edge: 56, tempo: 64 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1.4, Draft: 1, Gloom: 1, Biteroot: 0.75, Rivet: 1, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'thorn-bind'],
+      flavor: 'A porous body that keeps a Bile hum in the thorn.',
+      habitat: ['thorn']
+    },
+    {
+      id: 'kaldrayember', name: 'Kaldrayember', primary: 'Cindersong', secondary: null,
+      rarity: 'uncommon', plan: 'colonial', artSeed: 35249, pitch: 'Low',
+      baseStats: { vigor: 84, focus: 55, guard: 71, spirit: 62, edge: 60, tempo: 34 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1.4, Gloom: 1, Biteroot: 1, Rivet: 0.75, Spark: 1, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'bolt-hum'],
+      flavor: 'A colonial body that keeps a Cindersong hum in the shelf.',
+      habitat: ['shelf']
+    },
+    {
+      id: 'oruoskmelt', name: 'Oruoskmelt', primary: 'Brine', secondary: null,
+      rarity: 'common', plan: 'crystalline', artSeed: 35346, pitch: 'Mid',
+      baseStats: { vigor: 85, focus: 58, guard: 42, spirit: 69, edge: 64, tempo: 40 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1.4, Biteroot: 1, Rivet: 1, Spark: 0.75, Bile: 1 },
+      learnset: ['hush-ember', 'coal-spiral', 'rivet-press'],
+      flavor: 'A crystalline body that keeps a Brine hum in the foundry.',
+      habitat: ['foundry']
+    },
+    {
+      id: 'draysolmslab', name: 'Draysolmslab', primary: 'Stratum', secondary: null,
+      rarity: 'rare', plan: 'orbiting', artSeed: 35443, pitch: 'High',
+      baseStats: { vigor: 86, focus: 61, guard: 47, spirit: 76, edge: 36, tempo: 46 },
+      baseWard: { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1, Gloom: 1, Biteroot: 1.4, Rivet: 1, Spark: 1, Bile: 0.75 },
+      learnset: ['hush-ember', 'coal-spiral', 'anvil-chord'],
+      flavor: 'A orbiting body that keeps a Stratum hum in the fen.',
+      habitat: ['fen']
     }
   ];
 
@@ -321,6 +834,75 @@
     '#gggg..............#',
     '#..................#',
     '#..................#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+
+  const FEN = [
+    '####################',
+    '#eH................#',
+    '#......gggggg......#',
+    '#..N...gggggg......#',
+    '#......gggggg......#',
+    '#..................#',
+    '#.......SSSS.......#',
+    '#.......SSSS.......#',
+    '#..................#',
+    '#....gggggg........#',
+    '#....gggggg........#',
+    '#..................#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+  const THORN = [
+    '####################',
+    '#e..............H..#',
+    '#..gggggg..........#',
+    '#..gggggg......N...#',
+    '#..gggggg..........#',
+    '#..................#',
+    '#.........SSSS.....#',
+    '#.........SSSS.....#',
+    '#..................#',
+    '#............gggg..#',
+    '#............gggg..#',
+    '#..................#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+  const SHELF = [
+    '####################',
+    '#eH................#',
+    '#.....gggggg.......#',
+    '#..N..gggggg.......#',
+    '#.....gggggg.......#',
+    '#..................#',
+    '#............SSSS..#',
+    '#............SSSS..#',
+    '#..................#',
+    '#gggg..............#',
+    '#gggg..............#',
+    '#..................#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+  const FOUNDRY = [
+    '####################',
+    '#e...............H.#',
+    '#......gggggg......#',
+    '#......gggggg..N...#',
+    '#......gggggg......#',
+    '#..................#',
+    '#..SSSS............#',
+    '#..SSSS............#',
+    '#..................#',
+    '#..........gggg....#',
+    '#..........gggg....#',
+    '#..................#',
     '#B...............r.#',
     '####################'
   ];
@@ -360,11 +942,51 @@
       id: 'ridge',
       name: 'Spark Ridge',
       wardenId: 'odel',
-      links: { B: 'cut' },
+      links: { B: 'cut', D: 'fen' },
       levelMin: 12,
       levelMax: 15,
       encounters: ['myrrarc', 'sevflick', 'karuspore', 'vireblight', 'draygust'],
       map: RIDGE
+    },
+    fen: {
+      id: 'fen',
+      name: 'Gloom Fen',
+      wardenId: 'ulm',
+      links: { B: 'ridge', D: 'thorn' },
+      levelMin: 14,
+      levelMax: 16,
+      encounters: ['brinveshember', 'kaldrayhollow', 'sevnixablight', 'ulmoskveil', 'zephulmflick', 'solmquinslab', 'thurvirebolt', 'veshthurmelt', 'lummorfrond', 'gravoruember', 'ulmsevhollow', 'karugravblight', 'nyxwyngust', 'mormyrrflick', 'draysolmslab'],
+      map: FEN
+    },
+    thorn: {
+      id: 'thorn',
+      name: 'Biteroot Thorn',
+      wardenId: 'zeph',
+      links: { B: 'fen', D: 'shelf' },
+      levelMin: 15,
+      levelMax: 17,
+      encounters: ['talpellmelt', 'oruoskfrond', 'nixazephember', 'oskkaruhollow', 'myrrodelblight', 'virebringust', 'brinveshflick', 'kaldrayslab', 'sevnixabolt', 'ulmoskdrown', 'zephulmfrond', 'solmquinember', 'thurvirehollow', 'veshthurblight'],
+      map: THORN
+    },
+    shelf: {
+      id: 'shelf',
+      name: 'Draft Shelf',
+      wardenId: 'karu',
+      links: { B: 'thorn', D: 'foundry' },
+      levelMin: 16,
+      levelMax: 18,
+      encounters: ['mormyrrslab', 'draysolmbolt', 'pellnyxmelt', 'wyntalfrond', 'quinkalember', 'odellumhollow', 'talpellblight', 'oruoskgust', 'nixazephflick', 'oskkaruslab', 'myrrodelbolt', 'virebrinmelt', 'brinveshfrond', 'kaldrayember'],
+      map: SHELF
+    },
+    foundry: {
+      id: 'foundry',
+      name: 'Rivet Foundry',
+      wardenId: 'tal',
+      links: { B: 'shelf' },
+      levelMin: 17,
+      levelMax: 19,
+      encounters: ['veshthurgust', 'lummorflick', 'gravoruslab', 'ulmsevbolt', 'karugravmelt', 'nyxwynfrond', 'mormyrrember', 'draysolmhollow', 'pellnyxblight', 'wyntalgust', 'quinkalflick', 'odellumslab', 'talpellbolt', 'oruoskmelt'],
+      map: FOUNDRY
     }
   };
 
@@ -413,13 +1035,66 @@
       name: 'Warden Odel',
       sanctum: 'Sanctum of Spark',
       intro: 'I keep the ridge. This Sanctum refuses any Motif whose Harmonic is not your forward Resonant\'s own. Bring a voice that can sing itself.',
-      win: 'Your own Harmonic held. Four Sanctums have an answer. The fracture is still wider than this ridge.',
+      win: 'Your own Harmonic held. The east gate opens onto the fen.',
       loss: 'A borrowed Harmonic dies in this room. Attune a voice whose own song matches, then return.',
       rules: { primaryLock: true },
       team: [
         { speciesId: 'myrrarc', level: 15 },
         { speciesId: 'sevflick', level: 16 },
         { speciesId: 'karuspore', level: 16 }
+      ]
+    },
+
+    ulm: {
+      id: 'ulm',
+      name: 'Warden Ulm',
+      sanctum: 'Sanctum of Gloom',
+      intro: 'I keep the fen. Finish this phrase in eight beats. If the song is still open after that, the Sanctum closes on you.',
+      win: 'Eight beats held. The thorn past the east gate asks for Kindling only.',
+      loss: 'The phrase ran long. The fen does not grant extra beats. Rest and return.',
+      rules: { phraseLimit: 8 },
+      team: [
+        { speciesId: 'brinveshember', level: 17 },
+        { speciesId: 'kaldrayhollow', level: 18 }
+      ]
+    },
+    zeph: {
+      id: 'zeph',
+      name: 'Warden Zeph',
+      sanctum: 'Sanctum of Biteroot',
+      intro: 'I keep the thorn. Only Kindling is heard here. A heavier Motif spends Cadence and does nothing.',
+      win: 'Kindling was enough. The shelf will ask your Choir to trade voices.',
+      loss: 'A heavy Motif dies in this room. Bring Kindling and return.',
+      rules: { kindlingOnly: true },
+      team: [
+        { speciesId: 'talpellmelt', level: 17 },
+        { speciesId: 'oruoskfrond', level: 18 }
+      ]
+    },
+    karu: {
+      id: 'karu',
+      name: 'Warden Karu',
+      sanctum: 'Sanctum of Draft',
+      intro: 'I keep the shelf. After you sing, another living voice from the Choir must come forward. The same Resonant may not answer twice in a row.',
+      win: 'You let the Choir trade. The foundry softens only the first phrase.',
+      loss: 'One voice cannot hold this shelf. Keep two Resonants with Vigor and return.',
+      rules: { rotate: true },
+      team: [
+        { speciesId: 'mormyrrslab', level: 18 },
+        { speciesId: 'draysolmbolt', level: 18 }
+      ]
+    },
+    tal: {
+      id: 'tal',
+      name: 'Warden Tal',
+      sanctum: 'Sanctum of Rivet',
+      intro: 'I keep the foundry. The first phrase lands softly. After that, the metal hears you in full.',
+      win: 'The foundry is answered. Eight Sanctums have a record. What remains is not this gate.',
+      loss: 'The soft opening was not the whole phrase. Heal at the lamp and come back.',
+      rules: { openingSoften: true },
+      team: [
+        { speciesId: 'veshthurgust', level: 18 },
+        { speciesId: 'lummorflick', level: 19 }
       ]
     }
   };
