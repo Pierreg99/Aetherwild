@@ -30,6 +30,7 @@ There is no build step. `index.html` loads plain scripts. Use a local server bec
 - The lamp tile restores Vigor and Cadence.
 - Warden Solm keeps the Sanctum in Lumenfall Yard. A win and a loss are both shown. After the first win, the Conductor speaks, and the east gate opens.
 - Brine Marches, Stratum Cut, Spark Ridge, Gloom Fen, Biteroot Thorn, Draft Shelf, and Rivet Foundry follow. Each Sanctum is a different trial: forward Resonant only, withdrawal under half Vigor, own Harmonic only, an eight-phrase limit, Kindling only, a required Choir rotation, or a softened first phrase. West gates go back. East gates stay shut until the local Sanctum is answered.
+- A wild encounter, a cleared Sanctum, and the Prime Voice ending each play a short generated phrase. There is no downloaded audio.
 - After all eight Sanctums, the foundry's east gate opens Chorus Hall. Four voices answer in order. The lamp in the hall restores your Choir between them. When the four are quiet, the dais calls the Prime Voice. Winning that phrase ends the survey.
 
 

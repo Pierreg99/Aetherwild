@@ -12,7 +12,7 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 - Records stay in `localStorage`. A record that fails to parse is copied aside and is not required to be deleted before a new survey.
 - Choir size is 4. The Vault holds 3 seats. The brief's Choir of 6 is still not the cap.
 - Nine Harmonics. The chart is a circulant over all nine: strong against the next two, weakness derived. Extending the cycle changed which pairs Stratum and Draft answer. That is intentional.
-- Eighty-one Resonants and one hundred twenty Motifs. The Motifs are not yet split into the brief's class quotas. Eight Sanctum zones on foot, then Chorus Hall. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
+- Eighty-one Resonants and one hundred twenty Motifs: 12 Kindling, 18 Pulse, 14 Guard, and 76 across the nine Harmonic classes. Eight Sanctum zones on foot, then Chorus Hall. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
 
 ## Not built yet
 
@@ -21,7 +21,7 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 - The brief's contradictory Ward line that reads the attacker's Ward. Incoming Ward from section 1.4 is what the slice multiplies.
 - A wild Resonant does not answer during the three Hums. On a failed Attunement it simply leaves.
 - TypeScript, Vite, Vitest, Playwright, and the eight toolchain gates. Static files are required so Pages can serve `main` with no build. Checks are `node test/check.mjs`.
-- Procedural bitmap font, gamepad, a full Web Audio score, contact sheet, 10,000-phrase fuzz, and a headless browser walk of the canvas. Short sine tones play on a result. The node check covers data, chart balance, Attunement, Ascension, Sanctum rules, and short scripted phrases. A phrase that reaches 200 ends by remaining Vigor.
+- Procedural bitmap font, gamepad, contact sheet, 10,000-phrase fuzz, and a headless browser walk of the canvas. Short sine tones still play on a result. A generated score plays at a wild encounter, a Sanctum clear, and the Prime Voice ending. The node check covers data, chart balance, Attunement, Ascension, Sanctum rules, motif quotas, the score schedule, and short scripted phrases. A phrase that reaches 200 ends by remaining Vigor.
 - Day cycle, migrations beyond version 1, and i18n tables. A record can be shared as text from the yard and read back. An older record whose reserve was one Resonant is read as a one-seat Vault, and a missing Shard purse loads as zero. Player-facing lines live in `js/data.js` where the slice has them, and also in the engine log sentences.
 - The external brief is not vendored. It embeds a third-party name list, which does not belong in this public tree.
 
@@ -37,6 +37,10 @@ The yard stall is the `P` tile west of the deep grass. Quieting a foe adds Shard
 
 The east gate of Rivet Foundry opens only after all eight Sanctums. Chorus Hall then fights four voices in order. A loss heals you in the hall and does not erase a voice already answered. After the fourth, the dais starts the Prime Voice, a three-Resonant phrase. Winning it sets `flags.primeClear` and plays the ending lines. That is the ending that exists. It is not a repaired world.
 
+## Score
+
+`js/audio.js` schedules original interval rows with Web Audio: a sine and a quiet triangle a fifth above. Encounter, Sanctum clear, and the Prime Voice ending each have their own row. Nothing is sampled from another piece, and there is no audio file to fetch. Pulse and Guard meet the class counts. They do not yet apply the brief's status, recoil, or ward-raising effects. Those stay with the unbuilt status phrases.
+
 ## Later
 
-A full score, and the TypeScript, Vite, and Playwright gates, are still open. Do not mark them done until they are playable.
+TypeScript, Vite, and Playwright stay open. Static files on `main` are what GitHub Pages serves. Do not mark those gates done until they exist without a required build.

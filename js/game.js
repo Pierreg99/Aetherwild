@@ -38,6 +38,11 @@
     if (audio && audio[kind]) audio[kind]();
   }
 
+  function playScore(name) {
+    const audio = globalThis.AetherAudio;
+    if (audio && audio.playScore) audio.playScore(name);
+  }
+
   function encodeRecord(obj) {
     const bytes = new TextEncoder().encode(JSON.stringify(obj));
     let bin = '';
@@ -298,6 +303,7 @@
     humKindling = false;
     logLines = [];
     pushLog(E.displayName(foe) + ' · ' + E.species(id).primary + ' · level ' + level);
+    playScore('encounter');
     screen = 'battle';
     dockSig = '';
   }
@@ -343,11 +349,13 @@
     save.grace = 3;
     if (result === 'win' && kind === 'warden' && !save.flags.conductorHeard) {
       E.healChoir(save);
+      playScore('sanctum');
       openConductor(A.WARDENS[wardenId] ? A.WARDENS[wardenId].win : A.STRINGS.winSlice);
       return;
     }
     if (result === 'win' && kind === 'warden') {
       E.healChoir(save);
+      playScore('sanctum');
       pushLog(A.WARDENS[wardenId] ? A.WARDENS[wardenId].win : A.STRINGS.winSlice);
       save.storyBeat = 'sanctum-cleared';
     }
@@ -358,6 +366,7 @@
     if (result === 'win' && kind === 'prime') {
       E.healChoir(save);
       persist();
+      playScore('ending');
       openEnding();
       return;
     }
@@ -369,7 +378,7 @@
       save.y = spawn.y;
     }
     persist();
-    blip(result === 'loss' ? 'harm' : 'confirm');
+    if (!(result === 'win' && kind === 'warden')) blip(result === 'loss' ? 'harm' : 'confirm');
     screen = 'world';
     dockSig = '';
   }

@@ -481,6 +481,72 @@ assert(vial.ok === true, 'cadence vial sells');
 assert(buyer.choir[0].cadence[buyer.choir[0].knownMotifs[0]] === engine.motif(buyer.choir[0].knownMotifs[0]).cadenceMax, 'vial refills cadence');
 assert(buyer.shards === 0, 'vial spends shards');
 
+const quota = { Kindling: 12, Pulse: 18, Guard: 14 };
+const counts = {};
+for (const motifRow of data.MOTIFS) counts[motifRow.cls] = (counts[motifRow.cls] || 0) + 1;
+for (const cls of Object.keys(quota)) assert(counts[cls] === quota[cls], cls + ' quota ' + counts[cls]);
+let harmonicCount = 0;
+for (const cls of data.HARMONICS) {
+  assert((counts[cls] || 0) > 0, cls + ' has motifs');
+  harmonicCount += counts[cls] || 0;
+}
+assert(harmonicCount === 76, 'harmonic classes total 76');
+assert(data.MOTIFS.length >= 120, 'motif count stays at least 120');
+for (const motifRow of data.MOTIFS) {
+  if (motifRow.cls !== 'Kindling') continue;
+  assert(motifRow.power <= 40 && motifRow.harmony >= 30 && motifRow.harmony <= 55, motifRow.id + ' stays a kindling tool');
+}
+
+const gameSrc = readFileSync(join(root, 'js/game.js'), 'utf8');
+assert(gameSrc.includes("playScore('encounter')"), 'encounter starts the score');
+assert(gameSrc.includes("playScore('sanctum')"), 'sanctum clear starts the score');
+assert(gameSrc.includes("playScore('ending')"), 'the ending starts the score');
+const scoreBox = { started: [] };
+function FakeAudio() {
+  this.currentTime = 1;
+  this.state = 'running';
+  this.destination = {};
+}
+FakeAudio.prototype.resume = function () {};
+FakeAudio.prototype.createOscillator = function () {
+  return {
+    type: 'sine',
+    frequency: { value: 0 },
+    connect: function () {},
+    start: function (when) { scoreBox.started.push(when); },
+    stop: function () {}
+  };
+};
+FakeAudio.prototype.createGain = function () {
+  return {
+    gain: {
+      setValueAtTime: function () {},
+      exponentialRampToValueAtTime: function () {}
+    },
+    connect: function () {}
+  };
+};
+globalThis.AudioContext = FakeAudio;
+const audio = require(join(root, 'js/audio.js'));
+const span = (name) => audio.phrases[name].reduce((sum, note) => sum + note.dur, 0);
+assert(audio.phrases.encounter.length >= 4 && span('encounter') >= 1, 'encounter is more than a short tone');
+assert(audio.phrases.sanctum.length >= 6 && span('sanctum') >= 2, 'sanctum clear is a phrase');
+assert(audio.phrases.ending.length >= 8 && span('ending') >= 3, 'ending is a longer phrase');
+const seenRows = new Set();
+for (const name of ['encounter', 'sanctum', 'ending']) {
+  const row = audio.phrases[name].map((note) => note.freq + ':' + note.dur).join(',');
+  assert(!seenRows.has(row), name + ' is its own phrase');
+  seenRows.add(row);
+  for (const note of audio.phrases[name]) assert(note.freq >= 80 && note.freq <= 1200 && note.dur >= 0.1, name + ' note in range');
+}
+const startedBefore = scoreBox.started.length;
+assert(audio.playScore('encounter') === true, 'encounter score schedules');
+assert(audio.playScore('sanctum') === true, 'sanctum score schedules');
+assert(audio.playScore('ending') === true, 'ending score schedules');
+const voices = scoreBox.started.length - startedBefore;
+const expected = (audio.phrases.encounter.length + audio.phrases.sanctum.length + audio.phrases.ending.length) * 2;
+assert(voices === expected, 'each score note schedules a tone and an overtone, got ' + voices);
+
 console.log('resonants: ' + data.RESONANTS.length);
 console.log('motifs: ' + data.MOTIFS.length);
 console.log('assertions passed: ' + passed);
