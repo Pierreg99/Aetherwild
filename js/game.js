@@ -154,6 +154,7 @@
     if (t === 'S') { openSanctum(); return; }
     if (t === 'D' || t === 'B') { openGate(zone, t); return; }
     if (t === 'C') { openChorus(); return; }
+    if (t === 'P') { openShop(); return; }
     save.x = nx;
     save.y = ny;
     if (t === 'H') {
@@ -178,6 +179,7 @@
     else if (t === 'S') openSanctum();
     else if (t === 'D' || t === 'B') openGate(zone, t);
     else if (t === 'C') openChorus();
+    else if (t === 'P') openShop();
     else if (t === 'H') {
       E.healChoir(save);
       pushLog(A.STRINGS.healed);
@@ -427,20 +429,27 @@
     if (!dialogue && screen === 'dialogue') screen = 'world';
   }
 
+  function openShop() {
+    screen = 'shop';
+    pushLog(A.SHOPS.yard.name + '. Shards: ' + (save.shards || 0) + '.');
+    dockSig = '';
+  }
+
   function moveToReserve(index) {
-    if (save.choir.length < 2) { pushLog('The Choir cannot be empty.'); return; }
-    if (save.reserve) { pushLog('Reserve already waits.'); return; }
-    const inst = save.choir.splice(index, 1)[0];
-    save.reserve = inst;
-    if (save.active >= save.choir.length) save.active = save.choir.length - 1;
+    const inst = save.choir[index];
+    if (!E.storeReserve(save, index)) {
+      if (save.choir.length < 2) pushLog('The Choir cannot be empty.');
+      else pushLog('The Vault is full.');
+      return;
+    }
     persist();
-    pushLog(E.displayName(inst) + ' waits in reserve.');
+    pushLog(E.displayName(inst) + ' waits in the Vault.');
     dockSig = '';
   }
 
   function onKey(key) {
     if (key === 'Escape') {
-      if (screen === 'index' || screen === 'choir') { screen = 'world'; dockSig = ''; return; }
+      if (screen === 'index' || screen === 'choir' || screen === 'shop') { screen = 'world'; dockSig = ''; return; }
       if (screen === 'help' || screen === 'create') {
         screen = (screen === 'help' && helpReturn === 'world' && save) ? 'world' : 'title';
         dockSig = '';
@@ -521,7 +530,8 @@
     } else if (screen === 'create') sig = 'create:' + createPick;
     else if (screen === 'dialogue' && dialogue) sig = 'd:' + dialogue.index + ':' + dialogue.lines.length + ':' + (dialogue.choices ? 'c' : '');
     else if (screen === 'title') sig = 'title:' + (hasRecord() ? '1' : '0');
-    else if (screen === 'choir' && save) sig = 'choir:' + save.choir.map(function (c) { return c.uid + c.vigor; }).join(',') + ':' + (save.reserve ? save.reserve.uid : '');
+    else if (screen === 'choir' && save) sig = 'choir:' + save.choir.map(function (c) { return c.uid + c.vigor; }).join(',') + ':' + save.reserve.map(function (c) { return c.uid; }).join(',');
+    else if (screen === 'shop' && save) sig = 'shop:' + (save.shards || 0) + ':' + save.choir[save.active].vigor;
     else if (screen === 'index') sig = 'index:' + indexPick;
     else if (screen === 'world' && save) sig = 'world:' + save.zone;
     else if (screen === 'help') sig = 'help:' + helpReturn;
@@ -678,17 +688,40 @@
           pushLog(sp.name + ' is forward.');
           dockSig = '';
         });
-        addButton(g, 'Reserve ' + sp.name, function () { moveToReserve(i); });
+        addButton(g, 'Vault ' + sp.name, function () { moveToReserve(i); });
       });
-      if (save.reserve) {
-        const sp = E.species(save.reserve.speciesId);
-        addButton(g, 'Swap reserve ' + sp.name + ' into Choir 1', function () {
-          E.swapReserve(save, 0);
-          persist();
-          pushLog('Reserve and the first Choir seat trade places.');
+      if (save.reserve.length) {
+        save.reserve.forEach(function (inst, seat) {
+          const sp = E.species(inst.speciesId);
+          addButton(g, 'Swap Vault ' + (seat + 1) + ' ' + sp.name + ' into Choir 1', function () {
+            E.swapReserve(save, 0, seat);
+            persist();
+            pushLog('Vault seat ' + (seat + 1) + ' and the first Choir seat trade places.');
+            dockSig = '';
+          });
+        });
+      } else addButton(g, 'Vault empty', function () {}, true);
+      addButton(g, 'Back', function () { screen = 'world'; dockSig = ''; });
+      dock.appendChild(g);
+      return;
+    }
+
+    if (screen === 'shop' && save) {
+      const g = grid(1);
+      addButton(g, 'Shards ' + (save.shards || 0), function () {}, true);
+      A.SHOPS.yard.stock.forEach(function (item) {
+        addButton(g, item.name + ' · ' + item.cost, function () {
+          const res = E.buy(save, item.id);
+          if (!res.ok && res.reason === 'purse') pushLog(A.STRINGS.shopPoor);
+          else if (!res.ok && res.reason === 'full') pushLog(A.STRINGS.shopFull);
+          else if (!res.ok) pushLog('The stall does not have that.');
+          else {
+            persist();
+            pushLog(A.STRINGS.shopBought + ' Shards: ' + save.shards + '.');
+          }
           dockSig = '';
         });
-      } else addButton(g, 'Reserve empty', function () {}, true);
+      });
       addButton(g, 'Back', function () { screen = 'world'; dockSig = ''; });
       dock.appendChild(g);
       return;
@@ -709,18 +742,18 @@
           dockSig = '';
         });
       });
-      if (save.reserve) {
-        addButton(g, 'Let reserve ' + E.displayName(save.reserve) + ' go', function () {
-          E.releaseFor(save, 'reserve', overflowInst);
+      save.reserve.forEach(function (inst, seat) {
+        addButton(g, 'Let Vault ' + (seat + 1) + ' ' + E.displayName(inst) + ' go', function () {
+          E.releaseFor(save, 'vault:' + seat, overflowInst);
           overflowInst = null;
           battle = null;
           save.grace = 3;
           persist();
-          pushLog('Reserve takes the new hum.');
+          pushLog('That Vault seat takes the new hum.');
           screen = 'world';
           dockSig = '';
         });
-      }
+      });
       dock.appendChild(g);
       return;
     }
@@ -917,8 +950,8 @@
     } else if (screen === 'battle' && battle && save) {
       placeEl.textContent = battle.kind === 'warden' ? A.WARDENS[battle.wardenId].sanctum : 'Wild phrase';
       drawBattle();
-    } else if ((screen === 'index' || screen === 'choir' || screen === 'overflow') && save) {
-      placeEl.textContent = screen === 'index' ? 'Harmonic Index' : 'Choir';
+    } else if ((screen === 'index' || screen === 'choir' || screen === 'overflow' || screen === 'shop') && save) {
+      placeEl.textContent = screen === 'index' ? 'Harmonic Index' : (screen === 'shop' ? A.SHOPS.yard.name : 'Choir');
       if (screen === 'index') drawIndex();
       else drawWorld();
     } else {

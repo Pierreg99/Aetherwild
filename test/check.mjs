@@ -44,7 +44,8 @@ for (const h of data.HARMONICS) {
 
 const save = engine.freshSave('Surveyor', data.FIRST_RESONANCE[0], 7);
 for (const key of data.SAVE_SCHEMA_KEYS) assert(Object.prototype.hasOwnProperty.call(save, key), 'save key ' + key);
-assert(save.choir.length === 1 && save.reserve === null, 'starts with one choir seat');
+assert(save.choir.length === 1 && Array.isArray(save.reserve) && save.reserve.length === 0, 'starts with one choir seat and an empty vault');
+assert(save.shards === 0, 'starts without shards');
 assert(save.choir.length <= data.CHOIR_MAX, 'choir cap');
 
 const a = save.choir[0];
@@ -146,7 +147,7 @@ assert(data.ZONES.yard.map.some((row) => row.includes('S')), 'sanctum exists');
 for (const slot of data.WARDENS.solm.team) assert(engine.species(slot.speciesId), 'warden species');
 
 assert(data.HARMONICS.length === 9, 'nine harmonics');
-assert(data.RESONANTS.length === 78, 'index holds 78 resonants');
+assert(data.RESONANTS.length === 81, 'index holds 81 resonants');
 assert(data.MOTIFS.length === 120, 'motif count is 120');
 assert(new Set(data.MOTIFS.map((m) => m.id)).size === 120, 'motif ids are unique');
 assert(new Set(data.MOTIFS.map((m) => m.name)).size === 120, 'motif names are unique');
@@ -378,6 +379,107 @@ assert(hall.flags.chorusClear === true, 'chorus clear is a real flag');
 clearVoice(hall, 'prime');
 assert(hall.flags.primeClear === true, 'prime voice win is recorded');
 assert(hall.storyBeat === 'prime', 'prime voice sets the ending beat');
+
+assert(data.LEVEL_CAP === 50, 'level cap is 50');
+const capped = engine.freshSave('Surveyor', 'draygust', 51);
+capped.choir[0].level = 49;
+capped.choir[0].experience = engine.experienceToAdvance(49) * 4;
+const capFoe = engine.makeInstance(capped, 'wynveil', 20);
+engine.grantResonance(capped, capFoe);
+assert(capped.choir[0].level === 50, 'progression stops at 50');
+const beforeXp = capped.choir[0].experience;
+engine.grantResonance(capped, capFoe);
+assert(capped.choir[0].level === 50, 'a second grant stays at 50');
+assert(capped.choir[0].experience > beforeXp, 'experience can still accrue at the cap');
+assert(capped.shards > 0, 'a quieted foe leaves shards');
+
+function ready(id, seed) {
+  const inst = engine.freshSave('Surveyor', id, seed).choir[0];
+  inst.level = 32;
+  inst.resonance = 180;
+  return inst;
+}
+const wreath = ready('tindflare', 61);
+assert(engine.evaluateAscension(wreath) === null, 'third stage still wants a bond peak');
+wreath.battleStats.bondPeak = 180;
+assert(engine.evaluateAscension(wreath).to === 'tindwreath', 'tindflare third stage');
+const wreathSave = engine.freshSave('Surveyor', 'tindflare', 62);
+wreathSave.choir[0] = wreath;
+assert(engine.tryAscend(wreathSave, wreath, []), 'third stage applies');
+assert(wreath.speciesId === 'tindwreath', 'tindflare becomes tindwreath');
+const well = ready('lumtide', 63);
+well.battleStats.motifUses.Kindling = 11;
+assert(engine.evaluateAscension(well) === null, 'eleven kindling uses are short of the third stage');
+well.battleStats.motifUses.Kindling = 12;
+assert(engine.evaluateAscension(well).to === 'lumwell', 'lumtide third stage');
+const spire = ready('oskslab', 64);
+assert(engine.evaluateAscension(spire).to === 'oskspire', 'oskslab third stage');
+spire.battleStats.fainted = true;
+assert(engine.evaluateAscension(spire) === null, 'a faint still blocks the third stage');
+for (const id of ['brinember', 'tindflare', 'mortide', 'lumtide', 'veshcrag', 'oskslab']) {
+  assert(engine.species(id), 'existing line kept ' + id);
+}
+
+assert(data.VAULT_SEATS === 3, 'vault has three seats');
+const box = engine.freshSave('Surveyor', 'brinember', 71);
+for (let i = 0; i < 3; i++) assert(engine.placeAttuned(box, engine.makeInstance(box, 'mortide', 5)) === 'choir', 'choir fills before the vault');
+assert(box.choir.length === 4, 'choir stays at four');
+for (let i = 0; i < 3; i++) assert(engine.placeAttuned(box, engine.makeInstance(box, 'veshcrag', 5)) === 'reserve', 'vault seat ' + (i + 1));
+assert(box.reserve.length === 3, 'vault holds three');
+assert(engine.placeAttuned(box, engine.makeInstance(box, 'draygust', 5)) === 'overflow', 'a fourth vault seat is refused');
+assert(engine.storeReserve(box, 1) === false, 'a full vault does not take another');
+const moved = engine.freshSave('Surveyor', 'brinember', 72);
+engine.placeAttuned(moved, engine.makeInstance(moved, 'mortide', 5));
+assert(engine.storeReserve(moved, 1) === true, 'a choir seat can move into the vault');
+assert(moved.reserve.length === 1 && moved.choir.length === 1, 'vault seat is occupied');
+const legacy = engine.freshSave('Surveyor', 'brinember', 73);
+legacy.reserve = engine.makeInstance(legacy, 'wynveil', 4);
+engine.normalizeSave(legacy);
+assert(Array.isArray(legacy.reserve) && legacy.reserve.length === 1, 'an old reserve seat becomes a vault seat');
+delete legacy.shards;
+engine.normalizeSave(legacy);
+assert(legacy.shards === 0, 'a record without shards loads at zero');
+
+const stall = data.ZONES.yard.map;
+assert(stall.some((row) => row.includes('P')), 'yard stall tile');
+let px = -1, py = -1, sx = -1, sy = -1;
+for (let y = 0; y < stall.length; y++) {
+  if (stall[y].indexOf('P') !== -1) { px = stall[y].indexOf('P'); py = y; }
+  if (stall[y].indexOf('@') !== -1) { sx = stall[y].indexOf('@'); sy = y; }
+}
+const seen = new Set();
+const q = [[sx, sy]];
+const block = '#~NSDBCP';
+let reached = false;
+while (q.length) {
+  const [x, y] = q.pop();
+  const key = x + ',' + y;
+  if (seen.has(key)) continue;
+  seen.add(key);
+  if (Math.abs(x - px) + Math.abs(y - py) === 1) reached = true;
+  for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+    const nx = x + dx, ny = y + dy;
+    if (ny < 0 || nx < 0 || ny >= stall.length || nx >= stall[0].length) continue;
+    const ch = stall[ny][nx];
+    if (block.indexOf(ch) !== -1) continue;
+    q.push([nx, ny]);
+  }
+}
+assert(reached, 'the stall is reachable from the yard spawn');
+const buyer = engine.freshSave('Surveyor', 'brinember', 81);
+buyer.shards = 8;
+buyer.choir[0].vigor = 1;
+const bought = engine.buy(buyer, 'vigor-draught');
+assert(bought.ok === true, 'vigor draught sells');
+assert(buyer.choir[0].vigor === buyer.choir[0].stats.vigor, 'draught restores vigor');
+assert(buyer.shards === 0, 'draught spends shards');
+assert(engine.buy(buyer, 'vigor-draught').ok === false, 'an empty purse cannot buy');
+buyer.shards = 6;
+buyer.choir[0].cadence[buyer.choir[0].knownMotifs[0]] = 0;
+const vial = engine.buy(buyer, 'cadence-vial');
+assert(vial.ok === true, 'cadence vial sells');
+assert(buyer.choir[0].cadence[buyer.choir[0].knownMotifs[0]] === engine.motif(buyer.choir[0].knownMotifs[0]).cadenceMax, 'vial refills cadence');
+assert(buyer.shards === 0, 'vial spends shards');
 
 console.log('resonants: ' + data.RESONANTS.length);
 console.log('motifs: ' + data.MOTIFS.length);

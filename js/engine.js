@@ -125,7 +125,8 @@
       y: spawn.y,
       active: 0,
       choir: [],
-      reserve: null,
+      reserve: [],
+      shards: 0,
       index: {},
       flags: { sanctums: {}, conductorHeard: false, wins: 0, losses: 0, keeper: false },
       storyBeat: 'yard',
@@ -180,6 +181,7 @@
     const inst = save.choir[save.active];
     if (!inst || inst.vigor <= 0) return gain;
     inst.experience += Math.max(1, gain);
+    save.shards = (save.shards || 0) + Math.max(1, Math.floor((foe.level || 1) / 2));
     inst.resonance = Math.min(255, inst.resonance + 8);
     const bs = ensureBattleStats(inst);
     bs.bondPeak = Math.max(bs.bondPeak, inst.resonance);
@@ -187,6 +189,7 @@
     bs.winsByHarmonic[primary] = (bs.winsByHarmonic[primary] || 0) + 1;
     if (save.zone) bs.biomes[save.zone] = true;
     let notes = 0;
+    if (inst.level > AETHER.LEVEL_CAP) inst.level = AETHER.LEVEL_CAP;
     while (inst.level < AETHER.LEVEL_CAP && inst.experience >= experienceToAdvance(inst.level)) {
       inst.experience -= experienceToAdvance(inst.level);
       inst.level += 1;
@@ -286,9 +289,16 @@
     }
   }
 
+  function vaultList(save) {
+    if (!Array.isArray(save.reserve)) save.reserve = save.reserve ? [save.reserve] : [];
+    if (save.reserve.length > AETHER.VAULT_SEATS) save.reserve.length = AETHER.VAULT_SEATS;
+    return save.reserve;
+  }
+
   function healChoir(save) {
+    const vault = vaultList(save);
     for (let i = 0; i < save.choir.length; i++) restore(save.choir[i]);
-    if (save.reserve) restore(save.reserve);
+    for (let i = 0; i < vault.length; i++) restore(vault[i]);
   }
 
   function livingIndexes(save) {
@@ -452,8 +462,9 @@
       save.choir.push(inst);
       return 'choir';
     }
-    if (!save.reserve) {
-      save.reserve = inst;
+    const vault = vaultList(save);
+    if (vault.length < AETHER.VAULT_SEATS) {
+      vault.push(inst);
       return 'reserve';
     }
     return 'overflow';
@@ -499,8 +510,8 @@
         battle.result = 'attuned';
         logs.push(displayName(inst) + ' attunes and is recorded in the Harmonic Index.');
         if (where === 'choir') logs.push('It joins your Choir.');
-        if (where === 'reserve') logs.push('The Choir is full. It waits in reserve.');
-        if (where === 'overflow') logs.push('Choir and reserve are full. Choose who lets the hum go.');
+        if (where === 'reserve') logs.push('The Choir is full. It waits in the Vault.');
+        if (where === 'overflow') logs.push('Choir and Vault are full. Choose who lets the hum go.');
       } else if (battle.attune.slots <= 0) {
         battle.result = 'fled';
         logs.push('Guard holds. The Resonant leaves.');
@@ -640,10 +651,12 @@
     return true;
   }
 
-  function swapReserve(save, choirIndex) {
-    if (choirIndex < 0 || choirIndex >= save.choir.length || !save.reserve) return false;
-    const next = save.reserve;
-    save.reserve = save.choir[choirIndex];
+  function swapReserve(save, choirIndex, vaultIndex) {
+    const vault = vaultList(save);
+    const seat = vaultIndex || 0;
+    if (choirIndex < 0 || choirIndex >= save.choir.length || !vault[seat]) return false;
+    const next = vault[seat];
+    vault[seat] = save.choir[choirIndex];
     save.choir[choirIndex] = next;
     if (save.choir[save.active].vigor <= 0) {
       const live = livingIndexes(save);
@@ -653,8 +666,16 @@
   }
 
   function releaseFor(save, slot, inst) {
+    const vault = vaultList(save);
     if (slot === 'reserve') {
-      save.reserve = inst;
+      if (!vault.length) vault.push(inst);
+      else vault[0] = inst;
+      return true;
+    }
+    if (typeof slot === 'string' && slot.indexOf('vault:') === 0) {
+      const seat = Number(slot.slice(6));
+      if (!isFinite(seat) || seat < 0 || seat >= vault.length) return false;
+      vault[seat] = inst;
       return true;
     }
     const index = slot;
@@ -664,6 +685,48 @@
     return true;
   }
 
+
+  function storeReserve(save, choirIndex) {
+    const vault = vaultList(save);
+    if (choirIndex < 0 || choirIndex >= save.choir.length) return false;
+    if (save.choir.length < 2) return false;
+    if (vault.length >= AETHER.VAULT_SEATS) return false;
+    const inst = save.choir.splice(choirIndex, 1)[0];
+    vault.push(inst);
+    if (save.active >= save.choir.length) save.active = save.choir.length - 1;
+    if (save.choir[save.active] && save.choir[save.active].vigor <= 0) {
+      const live = livingIndexes(save);
+      if (live.length) save.active = live[0];
+    }
+    return true;
+  }
+
+  function buy(save, itemId) {
+    const shop = AETHER.SHOPS && AETHER.SHOPS.yard;
+    if (!shop) return { ok: false, reason: 'missing' };
+    let item = null;
+    for (let i = 0; i < shop.stock.length; i++) if (shop.stock[i].id === itemId) item = shop.stock[i];
+    if (!item) return { ok: false, reason: 'missing' };
+    const purse = save.shards || 0;
+    if (purse < item.cost) return { ok: false, reason: 'purse' };
+    const inst = active(save);
+    if (!inst) return { ok: false, reason: 'choir' };
+    if (item.effect === 'vigor') {
+      if (inst.vigor >= inst.stats.vigor) return { ok: false, reason: 'full' };
+      inst.vigor = inst.stats.vigor;
+    } else if (item.effect === 'cadence') {
+      let spent = false;
+      for (let i = 0; i < inst.knownMotifs.length; i++) {
+        const id = inst.knownMotifs[i];
+        const max = motif(id).cadenceMax;
+        if ((inst.cadence[id] || 0) < max) spent = true;
+        inst.cadence[id] = max;
+      }
+      if (!spent) return { ok: false, reason: 'full' };
+    } else return { ok: false, reason: 'missing' };
+    save.shards = purse - item.cost;
+    return { ok: true, item: item };
+  }
 
   function mayEnter(save, zone, dir) {
     const dest = zone && zone.links ? zone.links[dir] : null;
@@ -689,9 +752,12 @@
     save.nextUid = save.nextUid || 1;
     save.flags.sanctums = save.flags.sanctums || {};
     for (let i = 0; i < save.choir.length; i++) save.choir[i].ward = normalizeWard(save.choir[i].ward);
-    if (save.reserve) save.reserve.ward = normalizeWard(save.reserve.ward);
+    const vault = vaultList(save);
+    if (typeof save.shards !== 'number' || save.shards < 0 || !isFinite(save.shards)) save.shards = 0;
+    save.shards = Math.floor(save.shards);
+    for (let i = 0; i < vault.length; i++) vault[i].ward = normalizeWard(vault[i].ward);
     for (let i = 0; i < save.choir.length; i++) ensureBattleStats(save.choir[i]);
-    if (save.reserve) ensureBattleStats(save.reserve);
+    for (let i = 0; i < vault.length; i++) ensureBattleStats(vault[i]);
     return save;
   }
 
@@ -719,7 +785,10 @@
     stepBattle: stepBattle,
     placeAttuned: placeAttuned,
     swapReserve: swapReserve,
+    storeReserve: storeReserve,
     releaseFor: releaseFor,
+    grantResonance: grantResonance,
+    buy: buy,
     normalizeSave: normalizeSave,
     evaluateAscension: evaluateAscension,
     tryAscend: tryAscend,

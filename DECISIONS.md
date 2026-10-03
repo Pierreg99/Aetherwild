@@ -10,27 +10,28 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 - The Harmonic chart is generated as a circulant: each Harmonic is strong against the next two, and weakness is the inverse. Every row has two strengths and two weaknesses.
 - Names are original compounds from a fixed syllable bank. Art is procedural canvas. No downloaded sprites. No runtime network.
 - Records stay in `localStorage`. A record that fails to parse is copied aside and is not required to be deleted before a new survey.
-- Choir size is 4, plus one reserve seat, because that was the slice contract. The brief's Choir of 6 is still not the cap.
+- Choir size is 4. The Vault holds 3 seats. The brief's Choir of 6 is still not the cap.
 - Nine Harmonics. The chart is a circulant over all nine: strong against the next two, weakness derived. Extending the cycle changed which pairs Stratum and Draft answer. That is intentional.
-- Seventy-eight Resonants and one hundred twenty Motifs. The Motifs are not yet split into the brief's class quotas. Eight Sanctum zones on foot, then Chorus Hall. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
+- Eighty-one Resonants and one hundred twenty Motifs. The Motifs are not yet split into the brief's class quotas. Eight Sanctum zones on foot, then Chorus Hall. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
 
 ## Not built yet
 
-- Only three Resonants have an Ascension, and none have a third stage.
-- Level cap is 20, not 50.
-- Level cap stays 20.
-- A Resonance Vault larger than one reserve seat. Letting a hum go is permanent in this slice.
+- Letting a hum go is permanent when the Choir and the Vault are both full.
 - Secondary Harmonics, status phrases (Dimmed, Riven, Brambled, Scorched), stat stages, and Cadence-empty substitution beyond a hard refusal.
 - The brief's contradictory Ward line that reads the attacker's Ward. Incoming Ward from section 1.4 is what the slice multiplies.
 - A wild Resonant does not answer during the three Hums. On a failed Attunement it simply leaves.
 - TypeScript, Vite, Vitest, Playwright, and the eight toolchain gates. Static files are required so Pages can serve `main` with no build. Checks are `node test/check.mjs`.
 - Procedural bitmap font, gamepad, a full Web Audio score, contact sheet, 10,000-phrase fuzz, and a headless browser walk of the canvas. Short sine tones play on a result. The node check covers data, chart balance, Attunement, Ascension, Sanctum rules, and short scripted phrases. A phrase that reaches 200 ends by remaining Vigor.
-- Tokens, shops, day cycle, migrations beyond version 1, and i18n tables. A record can be shared as text from the yard and read back. Player-facing lines live in `js/data.js` where the slice has them, and also in the engine log sentences.
+- Day cycle, migrations beyond version 1, and i18n tables. A record can be shared as text from the yard and read back. An older record whose reserve was one Resonant is read as a one-seat Vault, and a missing Shard purse loads as zero. Player-facing lines live in `js/data.js` where the slice has them, and also in the engine log sentences.
 - The external brief is not vendored. It embeds a third-party name list, which does not belong in this public tree.
 
 ## Ascension
 
-`evaluateAscension` is pure. It knows five conditions: bond peak, no faint, Motif class uses, Harmonic wins, and zone reached. Brinember, Mortide, and Veshcrag each use one of the first three, at Choir level 16 and Resonance 120. A win that crosses the line changes the Resonant in the Choir. Resonance rises by 8 on a quieted foe so the threshold is reachable before the level cap. That pace is a slice choice.
+`evaluateAscension` is pure. It knows five conditions: bond peak, no faint, Motif class uses, Harmonic wins, and zone reached. Brinember, Mortide, and Veshcrag each use one of the first three, at Choir level 16 and Resonance 120, and become Tindflare, Lumtide, and Oskslab. Those three use the same rules again at Choir level 32 and Resonance 180, and become Tindwreath, Lumwell, and Oskspire. A win that crosses the line changes the Resonant in the Choir. Resonance rises by 8 on a quieted foe. The level cap is 50, enforced when experience is applied.
+
+## Stall and Vault
+
+The yard stall is the `P` tile west of the deep grass. Quieting a foe adds Shards. The stall sells a Vigor draught for 8 and a Cadence vial for 6. Both refill numbers the phrase already uses. There is no real-world money. The Vault is `save.reserve`, an array of 3 seats. A full Choir attunes into an empty seat. The Choir screen can move a Resonant into an empty seat or swap a seat with Choir 1.
 
 ## Chorus and Prime Voice
 
@@ -38,4 +39,4 @@ The east gate of Rivet Foundry opens only after all eight Sanctums. Chorus Hall 
 
 ## Later
 
-Third-stage Ascension, shops, the level cap of 50, a Vault larger than one seat, a full score, and the TypeScript, Vite, and Playwright gates are still open. Do not mark them done until they are playable.
+A full score, and the TypeScript, Vite, and Playwright gates, are still open. Do not mark them done until they are playable.

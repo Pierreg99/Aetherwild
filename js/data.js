@@ -317,6 +317,17 @@
       learnset: ['coal-spiral', 'ember-ring', 'flare-lattice'],
       flavor: 'The shard has opened. Two flares now share one orbit.',
       habitat: [],
+      fromAscension: true,
+      ascension: { to: 'tindwreath', minLevel: 32, minResonance: 180, condition: { kind: 'bond_peak', resonance: 180 } }
+    },
+    {
+      id: 'tindwreath', name: 'Tindwreath', primary: 'Cindersong', secondary: null,
+      rarity: 'mythic', plan: 'orbiting', artSeed: 40111, pitch: 'High',
+      baseStats: { vigor: 92, focus: 80, guard: 66, spirit: 108, edge: 64, tempo: 90 },
+      baseWard: ward('Cindersong', 'Brine'),
+      learnset: ['flare-lattice', 'coal-spiral', 'hush-ember'],
+      flavor: 'The two flares close into one wreath and keep the yard\'s first heat.',
+      habitat: [],
       fromAscension: true
     },
     {
@@ -327,6 +338,17 @@
       learnset: ['drown-glass', 'melt-ribbon', 'brine-lens'],
       flavor: 'A taller tide, lit from inside, that keeps the shore it came from.',
       habitat: [],
+      fromAscension: true,
+      ascension: { to: 'lumwell', minLevel: 32, minResonance: 180, condition: { kind: 'motif_category', cls: 'Kindling', uses: 12 } }
+    },
+    {
+      id: 'lumwell', name: 'Lumwell', primary: 'Brine', secondary: null,
+      rarity: 'mythic', plan: 'tidal', artSeed: 40223, pitch: 'Low',
+      baseStats: { vigor: 96, focus: 74, guard: 88, spirit: 96, edge: 78, tempo: 70 },
+      baseWard: ward('Brine', 'Draft'),
+      learnset: ['brine-lens', 'drown-glass', 'tide-murmur'],
+      flavor: 'The tide stops running and stands as a well of light.',
+      habitat: [],
       fromAscension: true
     },
     {
@@ -336,6 +358,17 @@
       baseWard: ward('Stratum', 'Spark'),
       learnset: ['stone-choir', 'slab-press', 'crag-bind'],
       flavor: 'The mesa has set. Light runs in a straight seam through the stone.',
+      habitat: [],
+      fromAscension: true,
+      ascension: { to: 'oskspire', minLevel: 32, minResonance: 180, condition: { kind: 'no_faint' } }
+    },
+    {
+      id: 'oskspire', name: 'Oskspire', primary: 'Stratum', secondary: null,
+      rarity: 'mythic', plan: 'geomorphic', artSeed: 40337, pitch: 'Mid',
+      baseStats: { vigor: 110, focus: 76, guard: 100, spirit: 60, edge: 88, tempo: 54 },
+      baseWard: ward('Stratum', 'Spark'),
+      learnset: ['stone-choir', 'crag-bind', 'slab-press'],
+      flavor: 'The seam rises into a spire. The stone still remembers the mesa.',
       habitat: [],
       fromAscension: true
     },
@@ -860,7 +893,7 @@
     '#......gggggg......#',
     '#..N...gggggg......#',
     '#......gggggg......#',
-    '#..................#',
+    '#P.................#',
     '#.......SSSS.......#',
     '#.......SSSS.......#',
     '#..................#',
@@ -1271,7 +1304,7 @@
   const STRINGS = {
     title: 'Aetherwild',
     blurb: 'The Lumenfall is fracturing. Resonants are going quiet. You walk as an Attunement Surveyor and record what still sings.',
-    keeper: 'I keep the yard lamp. Deep grass hides wild Resonants. Attunement gives you three Hums: Low, Mid, or High, or the Harmonic their Ward spikes toward. A Kindling Motif loosens Guard further. Your Choir holds four. One more may wait in reserve. Warden Solm keeps the Sanctum in the middle. After that phrase, the east gate opens onto the marches.',
+    keeper: 'I keep the yard lamp. Deep grass hides wild Resonants. Attunement gives you three Hums: Low, Mid, or High, or the Harmonic their Ward spikes toward. A Kindling Motif loosens Guard further. Your Choir holds four. Three more may wait in the Vault. The stall on the west path sells draughts for Shards. Warden Solm keeps the Sanctum in the middle. After that phrase, the east gate opens onto the marches.',
     pathShut: 'The path beyond is not on this survey yet.',
     sanctumNeeds: 'Your Choir has no Vigor left to offer.',
     sanctumDone: 'This Sanctum is already answered. The Warden lets the gate stand open.',
@@ -1296,7 +1329,22 @@
       'Prime Voice: Then it is chosen. I will not still them.',
       'The Conductor is not in this hall. The fracture is still in the sky.',
       'Your Index holds what you recorded. The survey does not pretend the world is mended.'
-    ]
+    ],
+    shopPoor: 'The stall wants more Shards.',
+    shopFull: 'That does nothing. Your Choir is already restored.',
+    shopBought: 'The stall takes the Shards and hands the vial over.'
+  };
+
+  const SHOPS = {
+    yard: {
+      id: 'yard',
+      name: 'Yard stall',
+      tile: 'P',
+      stock: [
+        { id: 'vigor-draught', name: 'Vigor draught', cost: 8, effect: 'vigor' },
+        { id: 'cadence-vial', name: 'Cadence vial', cost: 6, effect: 'cadence' }
+      ]
+    }
   };
 
   const SAVE_SCHEMA_KEYS = [
@@ -1307,8 +1355,10 @@
   const AETHER = {
     SAVE_KEY: 'aetherwild.save.v1',
     SAVE_VERSION: 1,
-    LEVEL_CAP: 20,
+    LEVEL_CAP: 50,
     CHOIR_MAX: 4,
+    VAULT_SEATS: 3,
+    SHOPS: SHOPS,
     HARMONICS: HARMONICS,
     HARMONIC_STRONG: HARMONIC_STRONG,
     MOTIFS: MOTIFS,

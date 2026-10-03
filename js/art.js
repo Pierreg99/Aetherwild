@@ -196,6 +196,11 @@
       ctx.lineTo(x + 8, y + 3);
       ctx.lineTo(x + 14, y + 14);
       ctx.fill();
+    } else if (ch === 'P') {
+      ctx.fillStyle = '#8a5a32';
+      ctx.fillRect(x + 2, y + 8, 12, 6);
+      ctx.fillStyle = '#e6c56e';
+      ctx.fillRect(x + 4, y + 4, 8, 4);
     } else if (ch === 'N') {
       ctx.fillStyle = '#d5e4ef';
       ctx.beginPath();
