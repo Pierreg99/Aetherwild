@@ -153,6 +153,7 @@
     if (t === 'N') { talkKeeper(); return; }
     if (t === 'S') { openSanctum(); return; }
     if (t === 'D' || t === 'B') { openGate(zone, t); return; }
+    if (t === 'C') { openChorus(); return; }
     save.x = nx;
     save.y = ny;
     if (t === 'H') {
@@ -176,6 +177,7 @@
     if (t === 'N') talkKeeper();
     else if (t === 'S') openSanctum();
     else if (t === 'D' || t === 'B') openGate(zone, t);
+    else if (t === 'C') openChorus();
     else if (t === 'H') {
       E.healChoir(save);
       pushLog(A.STRINGS.healed);
@@ -193,15 +195,14 @@
   }
 
   function openGate(zone, dir) {
-    const dest = zone.links && zone.links[dir];
-    if (!dest || !A.ZONES[dest]) {
-      pushLog(A.STRINGS.pathShut);
+    const gate = E.mayEnter(save, zone, dir);
+    if (!gate.ok) {
+      if (gate.reason === 'sanctum') pushLog('The far gate stays shut until this Sanctum is answered.');
+      else if (gate.reason === 'chorus') pushLog(A.STRINGS.chorusShut);
+      else pushLog(A.STRINGS.pathShut);
       return;
     }
-    if (dir === 'D' && zone.wardenId && !save.flags.sanctums[zone.wardenId]) {
-      pushLog('The far gate stays shut until this Sanctum is answered.');
-      return;
-    }
+    const dest = gate.dest;
     save.zone = dest;
     const mark = dir === 'D' ? 'e' : 'r';
     const land = E.findSpawn(A.ZONES[dest], mark);
@@ -210,6 +211,50 @@
     save.grace = 2;
     persist();
     pushLog(A.ZONES[dest].name);
+    dockSig = '';
+  }
+
+
+  function startSide(def, kind) {
+    const foes = def.team.map(function (slot) {
+      return E.makeInstance(save, slot.speciesId, slot.level);
+    });
+    foes.forEach(function (f) { E.see(save, f.speciesId, false); });
+    battle = E.createBattle(foes, kind, def.id, null);
+    submenu = '';
+    logLines = [];
+    pushLog(def.name + ' brings ' + foes.length + ' Resonants.');
+    screen = 'battle';
+    dockSig = '';
+  }
+
+  function openChorus() {
+    if (!ensureActive()) { pushLog(A.STRINGS.sanctumNeeds); return; }
+    if (save.flags.primeClear) { pushLog(A.STRINGS.endingDone); return; }
+    if (save.flags.chorusClear) {
+      dialogue = {
+        lines: A.PRIME_VOICE.intro.slice(),
+        index: 0,
+        choices: null,
+        onDone: function () { startSide(A.PRIME_VOICE, 'prime'); }
+      };
+      logLines = [];
+      pushLog(dialogue.lines[0]);
+      screen = 'dialogue';
+      dockSig = '';
+      return;
+    }
+    const step = save.flags.chorusIndex || 0;
+    const voice = A.CHORUS[step];
+    dialogue = {
+      lines: [voice.name + ': ' + voice.intro],
+      index: 0,
+      choices: null,
+      onDone: function () { startSide(voice, 'chorus'); }
+    };
+    logLines = [];
+    pushLog(dialogue.lines[0]);
+    screen = 'dialogue';
     dockSig = '';
   }
 
@@ -304,6 +349,16 @@
       pushLog(A.WARDENS[wardenId] ? A.WARDENS[wardenId].win : A.STRINGS.winSlice);
       save.storyBeat = 'sanctum-cleared';
     }
+    if (result === 'win' && kind === 'chorus') {
+      E.healChoir(save);
+      pushLog(save.flags.chorusClear ? A.STRINGS.chorusDone : A.STRINGS.chorusNext);
+    }
+    if (result === 'win' && kind === 'prime') {
+      E.healChoir(save);
+      persist();
+      openEnding();
+      return;
+    }
     if (result === 'loss') {
       pushLog(A.STRINGS.lossSlice);
       E.healChoir(save);
@@ -314,6 +369,23 @@
     persist();
     blip(result === 'loss' ? 'harm' : 'confirm');
     screen = 'world';
+    dockSig = '';
+  }
+
+
+  function openEnding() {
+    dialogue = {
+      lines: A.STRINGS.ending.slice(),
+      index: 0,
+      choices: null,
+      onDone: function () {
+        pushLog(A.PRIME_VOICE.win);
+        persist();
+      }
+    };
+    logLines = [];
+    pushLog(dialogue.lines[0]);
+    screen = 'dialogue';
     dockSig = '';
   }
 

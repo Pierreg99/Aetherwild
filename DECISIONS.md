@@ -12,13 +12,13 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 - Records stay in `localStorage`. A record that fails to parse is copied aside and is not required to be deleted before a new survey.
 - Choir size is 4, plus one reserve seat, because that was the slice contract. The brief's Choir of 6 is still not the cap.
 - Nine Harmonics. The chart is a circulant over all nine: strong against the next two, weakness derived. Extending the cycle changed which pairs Stratum and Draft answer. That is intentional.
-- Seventy-eight Resonants and thirty-six Motifs. Eight zones on foot: Lumenfall Yard, Brine Marches, Stratum Cut, Spark Ridge, Gloom Fen, Biteroot Thorn, Draft Shelf, Rivet Foundry. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
+- Seventy-eight Resonants and one hundred twenty Motifs. The Motifs are not yet split into the brief's class quotas. Eight Sanctum zones on foot, then Chorus Hall. Eight Sanctum trials: open phrase, forward only, withdrawal under half Vigor, own Harmonic only, eight-phrase limit, Kindling only, Choir rotation, and a softened first phrase.
 
 ## Not built yet
 
-- Motif count is 36, not 120. Eighty-four Motifs are still missing. Only three Resonants have an Ascension, and none have a third stage.
+- Only three Resonants have an Ascension, and none have a third stage.
 - Level cap is 20, not 50.
-- The Chorus and the Prime Voice are not built. A ninth zone is not built. Level cap stays 20.
+- Level cap stays 20.
 - A Resonance Vault larger than one reserve seat. Letting a hum go is permanent in this slice.
 - Secondary Harmonics, status phrases (Dimmed, Riven, Brambled, Scorched), stat stages, and Cadence-empty substitution beyond a hard refusal.
 - The brief's contradictory Ward line that reads the attacker's Ward. Incoming Ward from section 1.4 is what the slice multiplies.
@@ -32,6 +32,10 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 
 `evaluateAscension` is pure. It knows five conditions: bond peak, no faint, Motif class uses, Harmonic wins, and zone reached. Brinember, Mortide, and Veshcrag each use one of the first three, at Choir level 16 and Resonance 120. A win that crosses the line changes the Resonant in the Choir. Resonance rises by 8 on a quieted foe so the threshold is reachable before the level cap. That pace is a slice choice.
 
+## Chorus and Prime Voice
+
+The east gate of Rivet Foundry opens only after all eight Sanctums. Chorus Hall then fights four voices in order. A loss heals you in the hall and does not erase a voice already answered. After the fourth, the dais starts the Prime Voice, a three-Resonant phrase. Winning it sets `flags.primeClear` and plays the ending lines. That is the ending that exists. It is not a repaired world.
+
 ## Later
 
-The Chorus, the Prime Voice, third-stage Ascension, shops, the level cap of 50, the remaining Motifs, and the toolchain gates are still open. Do not mark them done until they are playable.
+Third-stage Ascension, shops, the level cap of 50, a Vault larger than one seat, a full score, and the TypeScript, Vite, and Playwright gates are still open. Do not mark them done until they are playable.

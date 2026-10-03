@@ -202,6 +202,11 @@
       ctx.arc(x + 8, y + 6, 3, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillRect(x + 6, y + 9, 4, 5);
+    } else if (ch === 'C') {
+      ctx.fillStyle = '#e6c56e';
+      ctx.beginPath();
+      ctx.arc(x + 8, y + 8, 5, 0, Math.PI * 2);
+      ctx.fill();
     } else if (ch === 'D' || ch === 'B') {
       ctx.strokeStyle = '#e6c56e';
       ctx.strokeRect(x + 3.5, y + 3.5, 9, 10);

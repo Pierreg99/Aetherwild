@@ -46,7 +46,91 @@
     { id: 'spore-hum', name: 'Spore Hum', harmonic: 'Bile', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A spore-hum used while Attuning.' },
     { id: 'blight-seep', name: 'Blight Seep', harmonic: 'Bile', cls: 'Bile', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 12, description: 'A seep of bitter light.' },
     { id: 'venom-thread', name: 'Venom Thread', harmonic: 'Bile', cls: 'Bile', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 6, description: 'Threads of sharp residue.' },
-    { id: 'spore-ring', name: 'Spore Ring', harmonic: 'Bile', cls: 'Bile', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A ring of drifting spores.' }
+    { id: 'spore-ring', name: 'Spore Ring', harmonic: 'Bile', cls: 'Bile', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A ring of drifting spores.' },
+    { id: 'brin-glass', name: 'Brin Glass', harmonic: 'Cindersong', cls: 'Guard', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 10, description: 'A Cindersong phrase carried as Brin Glass.' },
+    { id: 'tal-glass', name: 'Tal Glass', harmonic: 'Brine', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Brine phrase carried as Tal Glass.' },
+    { id: 'mor-glass', name: 'Mor Glass', harmonic: 'Stratum', cls: 'Stratum', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Stratum phrase carried as Mor Glass.' },
+    { id: 'vesh-glass', name: 'Vesh Glass', harmonic: 'Draft', cls: 'Draft', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Draft phrase carried as Vesh Glass.' },
+    { id: 'kal-glass', name: 'Kal Glass', harmonic: 'Gloom', cls: 'Gloom', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Gloom phrase carried as Kal Glass.' },
+    { id: 'oru-glass', name: 'Oru Glass', harmonic: 'Biteroot', cls: 'Biteroot', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Biteroot phrase carried as Oru Glass.' },
+    { id: 'dray-glass', name: 'Dray Glass', harmonic: 'Rivet', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Rivet phrase carried as Dray Glass.' },
+    { id: 'lum-glass', name: 'Lum Glass', harmonic: 'Spark', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Spark phrase carried as Lum Glass.' },
+    { id: 'sev-glass', name: 'Sev Glass', harmonic: 'Bile', cls: 'Bile', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Bile phrase carried as Sev Glass.' },
+    { id: 'nixa-glass', name: 'Nixa Glass', harmonic: 'Cindersong', cls: 'Cindersong', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Cindersong phrase carried as Nixa Glass.' },
+    { id: 'pell-glass', name: 'Pell Glass', harmonic: 'Brine', cls: 'Brine', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Brine phrase carried as Pell Glass.' },
+    { id: 'grav-glass', name: 'Grav Glass', harmonic: 'Stratum', cls: 'Stratum', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Stratum phrase carried as Grav Glass.' },
+    { id: 'tind-glass', name: 'Tind Glass', harmonic: 'Draft', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Draft phrase carried as Tind Glass.' },
+    { id: 'osk-glass', name: 'Osk Glass', harmonic: 'Gloom', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Gloom phrase carried as Osk Glass.' },
+    { id: 'wyn-glass', name: 'Wyn Glass', harmonic: 'Biteroot', cls: 'Biteroot', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Biteroot phrase carried as Wyn Glass.' },
+    { id: 'ulm-glass', name: 'Ulm Glass', harmonic: 'Rivet', cls: 'Rivet', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Rivet phrase carried as Ulm Glass.' },
+    { id: 'zeph-glass', name: 'Zeph Glass', harmonic: 'Spark', cls: 'Spark', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Spark phrase carried as Zeph Glass.' },
+    { id: 'myrr-glass', name: 'Myrr Glass', harmonic: 'Bile', cls: 'Pulse', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Bile phrase carried as Myrr Glass.' },
+    { id: 'quin-glass', name: 'Quin Glass', harmonic: 'Cindersong', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Cindersong phrase carried as Quin Glass.' },
+    { id: 'karu-glass', name: 'Karu Glass', harmonic: 'Brine', cls: 'Guard', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 10, description: 'A Brine phrase carried as Karu Glass.' },
+    { id: 'solm-glass', name: 'Solm Glass', harmonic: 'Stratum', cls: 'Stratum', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Stratum phrase carried as Solm Glass.' },
+    { id: 'vire-glass', name: 'Vire Glass', harmonic: 'Draft', cls: 'Draft', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Draft phrase carried as Vire Glass.' },
+    { id: 'odel-glass', name: 'Odel Glass', harmonic: 'Gloom', cls: 'Gloom', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Gloom phrase carried as Odel Glass.' },
+    { id: 'nyx-glass', name: 'Nyx Glass', harmonic: 'Biteroot', cls: 'Biteroot', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Biteroot phrase carried as Nyx Glass.' },
+    { id: 'thur-glass', name: 'Thur Glass', harmonic: 'Rivet', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Rivet phrase carried as Thur Glass.' },
+    { id: 'brin-ribbon', name: 'Brin Ribbon', harmonic: 'Spark', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Spark phrase carried as Brin Ribbon.' },
+    { id: 'tal-ribbon', name: 'Tal Ribbon', harmonic: 'Bile', cls: 'Bile', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Bile phrase carried as Tal Ribbon.' },
+    { id: 'mor-ribbon', name: 'Mor Ribbon', harmonic: 'Cindersong', cls: 'Cindersong', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Cindersong phrase carried as Mor Ribbon.' },
+    { id: 'vesh-ribbon', name: 'Vesh Ribbon', harmonic: 'Brine', cls: 'Brine', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Brine phrase carried as Vesh Ribbon.' },
+    { id: 'kal-ribbon', name: 'Kal Ribbon', harmonic: 'Stratum', cls: 'Stratum', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Stratum phrase carried as Kal Ribbon.' },
+    { id: 'oru-ribbon', name: 'Oru Ribbon', harmonic: 'Draft', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Draft phrase carried as Oru Ribbon.' },
+    { id: 'dray-ribbon', name: 'Dray Ribbon', harmonic: 'Gloom', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Gloom phrase carried as Dray Ribbon.' },
+    { id: 'lum-ribbon', name: 'Lum Ribbon', harmonic: 'Biteroot', cls: 'Biteroot', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Biteroot phrase carried as Lum Ribbon.' },
+    { id: 'sev-ribbon', name: 'Sev Ribbon', harmonic: 'Rivet', cls: 'Rivet', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Rivet phrase carried as Sev Ribbon.' },
+    { id: 'nixa-ribbon', name: 'Nixa Ribbon', harmonic: 'Spark', cls: 'Pulse', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Spark phrase carried as Nixa Ribbon.' },
+    { id: 'pell-ribbon', name: 'Pell Ribbon', harmonic: 'Bile', cls: 'Bile', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Bile phrase carried as Pell Ribbon.' },
+    { id: 'grav-ribbon', name: 'Grav Ribbon', harmonic: 'Cindersong', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Cindersong phrase carried as Grav Ribbon.' },
+    { id: 'tind-ribbon', name: 'Tind Ribbon', harmonic: 'Brine', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Brine phrase carried as Tind Ribbon.' },
+    { id: 'osk-ribbon', name: 'Osk Ribbon', harmonic: 'Stratum', cls: 'Guard', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Stratum phrase carried as Osk Ribbon.' },
+    { id: 'wyn-ribbon', name: 'Wyn Ribbon', harmonic: 'Draft', cls: 'Draft', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Draft phrase carried as Wyn Ribbon.' },
+    { id: 'ulm-ribbon', name: 'Ulm Ribbon', harmonic: 'Gloom', cls: 'Gloom', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Gloom phrase carried as Ulm Ribbon.' },
+    { id: 'zeph-ribbon', name: 'Zeph Ribbon', harmonic: 'Biteroot', cls: 'Biteroot', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Biteroot phrase carried as Zeph Ribbon.' },
+    { id: 'myrr-ribbon', name: 'Myrr Ribbon', harmonic: 'Rivet', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Rivet phrase carried as Myrr Ribbon.' },
+    { id: 'quin-ribbon', name: 'Quin Ribbon', harmonic: 'Spark', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Spark phrase carried as Quin Ribbon.' },
+    { id: 'karu-ribbon', name: 'Karu Ribbon', harmonic: 'Bile', cls: 'Bile', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Bile phrase carried as Karu Ribbon.' },
+    { id: 'solm-ribbon', name: 'Solm Ribbon', harmonic: 'Cindersong', cls: 'Cindersong', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Cindersong phrase carried as Solm Ribbon.' },
+    { id: 'vire-ribbon', name: 'Vire Ribbon', harmonic: 'Brine', cls: 'Brine', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Brine phrase carried as Vire Ribbon.' },
+    { id: 'odel-ribbon', name: 'Odel Ribbon', harmonic: 'Stratum', cls: 'Stratum', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Stratum phrase carried as Odel Ribbon.' },
+    { id: 'nyx-ribbon', name: 'Nyx Ribbon', harmonic: 'Draft', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Draft phrase carried as Nyx Ribbon.' },
+    { id: 'thur-ribbon', name: 'Thur Ribbon', harmonic: 'Gloom', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Gloom phrase carried as Thur Ribbon.' },
+    { id: 'brin-spiral', name: 'Brin Spiral', harmonic: 'Biteroot', cls: 'Biteroot', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Biteroot phrase carried as Brin Spiral.' },
+    { id: 'tal-spiral', name: 'Tal Spiral', harmonic: 'Rivet', cls: 'Pulse', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Rivet phrase carried as Tal Spiral.' },
+    { id: 'mor-spiral', name: 'Mor Spiral', harmonic: 'Spark', cls: 'Spark', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Spark phrase carried as Mor Spiral.' },
+    { id: 'vesh-spiral', name: 'Vesh Spiral', harmonic: 'Bile', cls: 'Bile', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Bile phrase carried as Vesh Spiral.' },
+    { id: 'kal-spiral', name: 'Kal Spiral', harmonic: 'Cindersong', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Cindersong phrase carried as Kal Spiral.' },
+    { id: 'oru-spiral', name: 'Oru Spiral', harmonic: 'Brine', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Brine phrase carried as Oru Spiral.' },
+    { id: 'dray-spiral', name: 'Dray Spiral', harmonic: 'Stratum', cls: 'Stratum', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Stratum phrase carried as Dray Spiral.' },
+    { id: 'lum-spiral', name: 'Lum Spiral', harmonic: 'Draft', cls: 'Guard', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Draft phrase carried as Lum Spiral.' },
+    { id: 'sev-spiral', name: 'Sev Spiral', harmonic: 'Gloom', cls: 'Gloom', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Gloom phrase carried as Sev Spiral.' },
+    { id: 'nixa-spiral', name: 'Nixa Spiral', harmonic: 'Biteroot', cls: 'Biteroot', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Biteroot phrase carried as Nixa Spiral.' },
+    { id: 'pell-spiral', name: 'Pell Spiral', harmonic: 'Rivet', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Rivet phrase carried as Pell Spiral.' },
+    { id: 'grav-spiral', name: 'Grav Spiral', harmonic: 'Spark', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Spark phrase carried as Grav Spiral.' },
+    { id: 'tind-spiral', name: 'Tind Spiral', harmonic: 'Bile', cls: 'Bile', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Bile phrase carried as Tind Spiral.' },
+    { id: 'osk-spiral', name: 'Osk Spiral', harmonic: 'Cindersong', cls: 'Cindersong', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Cindersong phrase carried as Osk Spiral.' },
+    { id: 'wyn-spiral', name: 'Wyn Spiral', harmonic: 'Brine', cls: 'Brine', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Brine phrase carried as Wyn Spiral.' },
+    { id: 'ulm-spiral', name: 'Ulm Spiral', harmonic: 'Stratum', cls: 'Stratum', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Stratum phrase carried as Ulm Spiral.' },
+    { id: 'zeph-spiral', name: 'Zeph Spiral', harmonic: 'Draft', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Draft phrase carried as Zeph Spiral.' },
+    { id: 'myrr-spiral', name: 'Myrr Spiral', harmonic: 'Gloom', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Gloom phrase carried as Myrr Spiral.' },
+    { id: 'quin-spiral', name: 'Quin Spiral', harmonic: 'Biteroot', cls: 'Pulse', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Biteroot phrase carried as Quin Spiral.' },
+    { id: 'karu-spiral', name: 'Karu Spiral', harmonic: 'Rivet', cls: 'Rivet', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Rivet phrase carried as Karu Spiral.' },
+    { id: 'solm-spiral', name: 'Solm Spiral', harmonic: 'Spark', cls: 'Spark', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Spark phrase carried as Solm Spiral.' },
+    { id: 'vire-spiral', name: 'Vire Spiral', harmonic: 'Bile', cls: 'Bile', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Bile phrase carried as Vire Spiral.' },
+    { id: 'odel-spiral', name: 'Odel Spiral', harmonic: 'Cindersong', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Cindersong phrase carried as Odel Spiral.' },
+    { id: 'nyx-spiral', name: 'Nyx Spiral', harmonic: 'Brine', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Brine phrase carried as Nyx Spiral.' },
+    { id: 'thur-spiral', name: 'Thur Spiral', harmonic: 'Stratum', cls: 'Stratum', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Stratum phrase carried as Thur Spiral.' },
+    { id: 'brin-needle', name: 'Brin Needle', harmonic: 'Draft', cls: 'Draft', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Draft phrase carried as Brin Needle.' },
+    { id: 'tal-needle', name: 'Tal Needle', harmonic: 'Gloom', cls: 'Guard', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Gloom phrase carried as Tal Needle.' },
+    { id: 'mor-needle', name: 'Mor Needle', harmonic: 'Biteroot', cls: 'Biteroot', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Biteroot phrase carried as Mor Needle.' },
+    { id: 'vesh-needle', name: 'Vesh Needle', harmonic: 'Rivet', cls: 'Kindling', power: 26, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Rivet phrase carried as Vesh Needle.' },
+    { id: 'kal-needle', name: 'Kal Needle', harmonic: 'Spark', cls: 'Kindling', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 40, description: 'A Spark phrase carried as Kal Needle.' },
+    { id: 'oru-needle', name: 'Oru Needle', harmonic: 'Bile', cls: 'Bile', power: 42, accuracy: 100, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Bile phrase carried as Oru Needle.' },
+    { id: 'dray-needle', name: 'Dray Needle', harmonic: 'Cindersong', cls: 'Cindersong', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Cindersong phrase carried as Dray Needle.' },
+    { id: 'lum-needle', name: 'Lum Needle', harmonic: 'Brine', cls: 'Brine', power: 58, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A Brine phrase carried as Lum Needle.' },
+    { id: 'sev-needle', name: 'Sev Needle', harmonic: 'Stratum', cls: 'Stratum', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 10, description: 'A Stratum phrase carried as Sev Needle.' }
   ];
 
   function ward(spike, resist) {
@@ -903,7 +987,25 @@
     '#..........gggg....#',
     '#..........gggg....#',
     '#..................#',
-    '#B...............r.#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+
+  const CHORUS_HALL = [
+    '####################',
+    '#eH................#',
+    '#@.................#',
+    '#..................#',
+    '#......gggg........#',
+    '#........CC........#',
+    '#........CC........#',
+    '#..................#',
+    '#..................#',
+    '#..................#',
+    '#..................#',
+    '#..................#',
+    '#B.................#',
     '####################'
   ];
 
@@ -982,11 +1084,23 @@
       id: 'foundry',
       name: 'Rivet Foundry',
       wardenId: 'tal',
-      links: { B: 'shelf' },
+      links: { B: 'shelf', D: 'chorus' },
       levelMin: 17,
       levelMax: 19,
       encounters: ['veshthurgust', 'lummorflick', 'gravoruslab', 'ulmsevbolt', 'karugravmelt', 'nyxwynfrond', 'mormyrrember', 'draysolmhollow', 'pellnyxblight', 'wyntalgust', 'quinkalflick', 'odellumslab', 'talpellbolt', 'oruoskmelt'],
       map: FOUNDRY
+    },
+
+    chorus: {
+      id: 'chorus',
+      name: 'Chorus Hall',
+      wardenId: null,
+      requiresChoir: true,
+      links: { B: 'foundry' },
+      levelMin: 18,
+      levelMax: 19,
+      encounters: ['kalflare', 'nyxshade', 'quinbolt', 'wynveil'],
+      map: CHORUS_HALL
     }
   };
 
@@ -1089,7 +1203,7 @@
       name: 'Warden Tal',
       sanctum: 'Sanctum of Rivet',
       intro: 'I keep the foundry. The first phrase lands softly. After that, the metal hears you in full.',
-      win: 'The foundry is answered. Eight Sanctums have a record. What remains is not this gate.',
+      win: 'The foundry is answered. Eight Sanctums have a record. The east gate opens onto the Chorus.',
       loss: 'The soft opening was not the whole phrase. Heal at the lamp and come back.',
       rules: { openingSoften: true },
       team: [
@@ -1097,6 +1211,61 @@
         { speciesId: 'lummorflick', level: 19 }
       ]
     }
+  };
+
+
+  const CHORUS = [
+    {
+      id: 'voice-brin',
+      name: 'Voice Brin',
+      intro: 'I am the first voice of the Chorus. Heat and brine, in that order. Answer both.',
+      team: [
+        { speciesId: 'kalflare', level: 18 },
+        { speciesId: 'orumelt', level: 18 }
+      ]
+    },
+    {
+      id: 'voice-nyx',
+      name: 'Voice Nyx',
+      intro: 'I am the second voice. The hall gets quieter here. Do not mistake quiet for mercy.',
+      team: [
+        { speciesId: 'nyxshade', level: 18 },
+        { speciesId: 'nixadusk', level: 19 }
+      ]
+    },
+    {
+      id: 'voice-quin',
+      name: 'Voice Quin',
+      intro: 'I am the third voice. Metal keeps time. Miss the beat and the phrase closes on you.',
+      team: [
+        { speciesId: 'quinbolt', level: 19 },
+        { speciesId: 'thurbolt', level: 19 }
+      ]
+    },
+    {
+      id: 'voice-zeph',
+      name: 'Voice Zeph',
+      intro: 'I am the fourth voice. After me, only the Prime Voice remains.',
+      team: [
+        { speciesId: 'wynveil', level: 19 },
+        { speciesId: 'sevflick', level: 19 }
+      ]
+    }
+  ];
+
+  const PRIME_VOICE = {
+    id: 'prime',
+    name: 'Prime Voice',
+    intro: [
+      'The four voices step back. One figure remains, empty-handed, the same calm as the Conductor and not the same person.',
+      'Prime Voice: I do not want the world silent. I want the last phrase to be chosen, not torn. If your Choir can outlast mine, the hall stays open.'
+    ],
+    win: 'The Prime Voice lets the note go. The Lumenfall is still torn, and the song is still here.',
+    team: [
+      { speciesId: 'tindflare', level: 19 },
+      { speciesId: 'lumtide', level: 19 },
+      { speciesId: 'oskslab', level: 19 }
+    ]
   };
 
   const STRINGS = {
@@ -1118,7 +1287,16 @@
       { id: 'reason', label: 'The fracture has a reason.', line: 'You: I will remember that the fracture has a reason. I still will not help you still the Choir.' }
     ],
     winSlice: 'The Sanctum is answered. The survey keeps its song, for now.',
-    lossSlice: 'Your Choir falls silent. The survey is not over.'
+    lossSlice: 'Your Choir falls silent. The survey is not over.',
+    chorusShut: 'The Chorus stays shut until all eight Sanctums are answered.',
+    chorusNext: 'That voice is quiet. The next one is on the dais.',
+    chorusDone: 'The Chorus is answered. Speak at the dais for the Prime Voice.',
+    endingDone: 'The hall is quiet. The song remains.',
+    ending: [
+      'Prime Voice: Then it is chosen. I will not still them.',
+      'The Conductor is not in this hall. The fracture is still in the sky.',
+      'Your Index holds what you recorded. The survey does not pretend the world is mended.'
+    ]
   };
 
   const SAVE_SCHEMA_KEYS = [
@@ -1137,6 +1315,8 @@
     RESONANTS: RESONANTS,
     ZONES: ZONES,
     WARDENS: WARDENS,
+    CHORUS: CHORUS,
+    PRIME_VOICE: PRIME_VOICE,
     STRINGS: STRINGS,
     SAVE_SCHEMA_KEYS: SAVE_SCHEMA_KEYS,
     FIRST_RESONANCE: ['brinember', 'mortide', 'veshcrag']

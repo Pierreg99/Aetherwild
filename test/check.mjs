@@ -147,13 +147,32 @@ for (const slot of data.WARDENS.solm.team) assert(engine.species(slot.speciesId)
 
 assert(data.HARMONICS.length === 9, 'nine harmonics');
 assert(data.RESONANTS.length === 78, 'index holds 78 resonants');
-assert(Object.keys(data.ZONES).length === 8, 'eight zones');
+assert(data.MOTIFS.length === 120, 'motif count is 120');
+assert(new Set(data.MOTIFS.map((m) => m.id)).size === 120, 'motif ids are unique');
+assert(new Set(data.MOTIFS.map((m) => m.name)).size === 120, 'motif names are unique');
+for (const motifRow of data.MOTIFS) {
+  assert(data.HARMONICS.includes(motifRow.harmonic), 'motif harmonic ' + motifRow.id);
+  assert(motifRow.power >= 0 && motifRow.accuracy > 0, 'motif numbers ' + motifRow.id);
+}
+assert(data.CHORUS.length === 4, 'chorus has four voices');
+for (const voice of data.CHORUS) {
+  assert(voice.team.length >= 2, voice.id + ' brings a phrase');
+  for (const slot of voice.team) assert(engine.species(slot.speciesId), voice.id + ' species');
+}
+assert(data.PRIME_VOICE.team.length >= 2, 'prime voice brings a phrase');
+for (const slot of data.PRIME_VOICE.team) assert(engine.species(slot.speciesId), 'prime species');
+assert(data.ZONES.foundry.links.D === 'chorus', 'chorus hall is past the foundry');
+assert(data.ZONES.chorus.requiresChoir === true, 'chorus waits on the eight sanctums');
+assert(data.ZONES.chorus.map.some((row) => row.includes('C')), 'chorus dais exists');
+
+assert(Object.keys(data.ZONES).length === 9, 'eight sanctum zones plus the chorus hall');
 assert(Object.keys(data.WARDENS).length === 8, 'eight sanctums');
 for (const zone of Object.values(data.ZONES)) {
   const width = zone.map[0].length;
   for (const row of zone.map) assert(row.length === width, zone.id + ' row width');
   assert(zone.map.some((row) => row.includes('e') || row.includes('@')), zone.id + ' has an entry');
-  assert(data.WARDENS[zone.wardenId], zone.id + ' warden');
+  if (zone.wardenId) assert(data.WARDENS[zone.wardenId], zone.id + ' warden');
+  else assert(zone.id === 'chorus', zone.id + ' without a warden');
   for (const dir of Object.keys(zone.links)) {
     const dest = zone.links[dir];
     if (!dest) continue;
@@ -332,7 +351,36 @@ engine.stepBattle(longSave, longBattle, { type: 'motif', motifId: longSave.choir
 assert(longBattle.phrases >= 200, 'phrase counter reaches the cap');
 assert(longBattle.result === 'win' || longBattle.result === 'loss', 'a long phrase still ends');
 
+
+function clearVoice(save, kind) {
+  save.choir[0].stats.tempo = 900;
+  save.choir[0].vigor = save.choir[0].stats.vigor;
+  const foe = engine.makeInstance(save, 'draygust', 2);
+  foe.vigor = 1;
+  foe.stats.tempo = 1;
+  const battle = engine.createBattle([foe], kind, kind);
+  engine.stepBattle(save, battle, { type: 'motif', motifId: 'ember-ring' });
+  assert(battle.result === 'win', kind + ' phrase can be won');
+  return battle;
+}
+const hall = engine.freshSave('Surveyor', 'brinember', 41);
+const blocked = engine.mayEnter(hall, data.ZONES.foundry, 'D');
+assert(blocked.ok === false && blocked.reason === 'sanctum', 'foundry gate waits on its sanctum');
+hall.flags.sanctums.tal = true;
+const early = engine.mayEnter(hall, data.ZONES.foundry, 'D');
+assert(early.ok === false && early.reason === 'chorus', 'chorus waits until every sanctum is answered');
+for (const id of Object.keys(data.WARDENS)) hall.flags.sanctums[id] = true;
+const open = engine.mayEnter(hall, data.ZONES.foundry, 'D');
+assert(open.ok === true && open.dest === 'chorus', 'eight sanctums open the chorus');
+for (let i = 0; i < data.CHORUS.length; i++) clearVoice(hall, 'chorus');
+assert(hall.flags.chorusIndex === 4, 'four chorus wins advance the sequence');
+assert(hall.flags.chorusClear === true, 'chorus clear is a real flag');
+clearVoice(hall, 'prime');
+assert(hall.flags.primeClear === true, 'prime voice win is recorded');
+assert(hall.storyBeat === 'prime', 'prime voice sets the ending beat');
+
 console.log('resonants: ' + data.RESONANTS.length);
+console.log('motifs: ' + data.MOTIFS.length);
 console.log('assertions passed: ' + passed);
 console.log('assertions failed: ' + failed);
 console.log('scripted wins: ' + wins + ' losses: ' + losses);

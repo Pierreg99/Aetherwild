@@ -365,7 +365,7 @@
 
   function onFoeDown(save, battle, logs) {
     logs.push(displayName(foe(battle)) + ' goes quiet.');
-    if (battle.kind === 'wild' || battle.kind === 'warden') {
+    if (battle.kind === 'wild' || battle.kind === 'warden' || battle.kind === 'chorus' || battle.kind === 'prime') {
       const gained = grantResonance(save, foe(battle));
       if (gained && gained.levels) logs.push(displayName(active(save)) + ' deepens. Choir level ' + active(save).level + '.');
       if (gained && gained.inst) tryAscend(save, gained.inst, logs);
@@ -381,6 +381,20 @@
         save.flags.sanctums[battle.wardenId] = true;
         save.storyBeat = 'sanctum-cleared';
         logs.push('The Warden has no further Resonant.');
+      } else if (battle.kind === 'chorus') {
+        const total = AETHER.CHORUS.length;
+        save.flags.chorusIndex = (save.flags.chorusIndex || 0) + 1;
+        if (save.flags.chorusIndex >= total) {
+          save.flags.chorusClear = true;
+          save.storyBeat = 'chorus';
+          logs.push('The Chorus is answered. The Prime Voice is still in the hall.');
+        } else {
+          logs.push('That voice goes quiet. Another waits.');
+        }
+      } else if (battle.kind === 'prime') {
+        save.flags.primeClear = true;
+        save.storyBeat = 'prime';
+        logs.push('The Prime Voice goes quiet. The hall keeps the song.');
       } else {
         logs.push('The grass is quiet again.');
       }
@@ -650,6 +664,23 @@
     return true;
   }
 
+
+  function mayEnter(save, zone, dir) {
+    const dest = zone && zone.links ? zone.links[dir] : null;
+    if (!dest || !AETHER.ZONES[dest]) return { ok: false, reason: 'shut' };
+    if (dir === 'D' && zone.wardenId && !(save.flags.sanctums && save.flags.sanctums[zone.wardenId])) {
+      return { ok: false, reason: 'sanctum' };
+    }
+    const next = AETHER.ZONES[dest];
+    if (next && next.requiresChoir) {
+      const ids = Object.keys(AETHER.WARDENS);
+      for (let i = 0; i < ids.length; i++) {
+        if (!save.flags.sanctums || !save.flags.sanctums[ids[i]]) return { ok: false, reason: 'chorus' };
+      }
+    }
+    return { ok: true, dest: dest };
+  }
+
   function normalizeSave(save) {
     if (!save || save.version !== AETHER.SAVE_VERSION) return null;
     for (let i = 0; i < AETHER.SAVE_SCHEMA_KEYS.length; i++) {
@@ -694,7 +725,8 @@
     tryAscend: tryAscend,
     active: active,
     foe: foe,
-    findSpawn: findSpawn
+    findSpawn: findSpawn,
+    mayEnter: mayEnter
   };
 
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
