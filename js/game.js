@@ -33,6 +33,25 @@
     logEl.textContent = logLines.join(' ');
   }
 
+  function blip(kind) {
+    const audio = globalThis.AetherAudio;
+    if (audio && audio[kind]) audio[kind]();
+  }
+
+  function encodeRecord(obj) {
+    const bytes = new TextEncoder().encode(JSON.stringify(obj));
+    let bin = '';
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  function decodeRecord(text) {
+    const bin = atob(text.trim());
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
   function persist() {
     try {
       localStorage.setItem(A.SAVE_KEY, JSON.stringify(save));
@@ -259,6 +278,7 @@
       overflowInst = battle.overflow;
       screen = 'overflow';
     }
+    if (battle && battle.result === 'attuned') blip('attune');
   }
 
   function finishBattle() {
@@ -288,6 +308,7 @@
       save.y = spawn.y;
     }
     persist();
+    blip(result === 'loss' ? 'harm' : 'confirm');
     screen = 'world';
     dockSig = '';
   }
@@ -512,6 +533,39 @@
       addButton(g, 'Choir', function () { screen = 'choir'; dockSig = ''; });
       addButton(g, 'Record', function () { persist(); pushLog('Record stored in this browser.'); });
       dock.appendChild(g);
+      const share = grid(2);
+      addButton(share, 'Share record', function () { screen = 'export'; dockSig = ''; });
+      addButton(share, 'Read record', function () { screen = 'import'; dockSig = ''; });
+      dock.appendChild(share);
+      return;
+    }
+
+    if (screen === 'export' || screen === 'import') {
+      const box = document.createElement('textarea');
+      box.setAttribute('aria-label', 'Record text');
+      box.rows = 4;
+      if (screen === 'export') box.value = encodeRecord(save);
+      const g = grid(1);
+      if (screen === 'import') {
+        addButton(g, 'Apply record', function () {
+          try {
+            const parsed = decodeRecord(box.value);
+            const norm = E.normalizeSave(parsed);
+            if (!norm) { pushLog('That record cannot be read.'); return; }
+            save = norm;
+            save.grace = 2;
+            persist();
+            pushLog('Record read for ' + save.surveyor + '.');
+            screen = 'world';
+            dockSig = '';
+          } catch (err) {
+            pushLog('That record cannot be read.');
+          }
+        });
+      }
+      addButton(g, 'Back', function () { screen = 'world'; dockSig = ''; });
+      dock.appendChild(box);
+      dock.appendChild(g);
       return;
     }
 
@@ -519,10 +573,12 @@
       const g = grid(2);
       A.RESONANTS.forEach(function (sp, i) {
         const rec = save.index[sp.id];
-        const label = rec && rec.seen ? sp.name : 'Unrecorded';
+        const unwritten = sp.fromAscension && !(rec && rec.seen);
+        const label = unwritten ? 'Unwritten' : (rec && rec.seen ? sp.name : 'Unrecorded');
         addButton(g, label, function () {
           indexPick = i;
           const r = save.index[sp.id];
+          if (sp.fromAscension && !(r && r.seen)) { pushLog('That line is still unwritten.'); dockSig = ''; return; }
           if (!r || !r.seen) pushLog('No record yet.');
           else if (!r.attuned) pushLog(sp.name + ' · ' + sp.primary + '. Seen, not attuned. ' + sp.flavor);
           else pushLog(sp.name + ' · ' + sp.primary + '. Attuned. ' + sp.flavor);

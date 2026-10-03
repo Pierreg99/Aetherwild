@@ -100,7 +100,8 @@
       cadence: cadence,
       knownMotifs: sp.learnset.slice(),
       resonance: 70,
-      experience: 0
+      experience: 0,
+      battleStats: emptyBattleStats(70)
     };
   }
 
@@ -143,6 +144,26 @@
     save.index[speciesId] = { seen: true, attuned: prev.attuned || !!attuned };
   }
 
+  function emptyBattleStats(resonance) {
+    return {
+      motifUses: {},
+      winsByHarmonic: {},
+      biomes: {},
+      bondPeak: resonance || 0,
+      fainted: false
+    };
+  }
+
+  function ensureBattleStats(inst) {
+    if (!inst.battleStats) inst.battleStats = emptyBattleStats(inst.resonance || 0);
+    inst.battleStats.motifUses = inst.battleStats.motifUses || {};
+    inst.battleStats.winsByHarmonic = inst.battleStats.winsByHarmonic || {};
+    inst.battleStats.biomes = inst.battleStats.biomes || {};
+    if (typeof inst.battleStats.bondPeak !== 'number') inst.battleStats.bondPeak = inst.resonance || 0;
+    if (typeof inst.battleStats.fainted !== 'boolean') inst.battleStats.fainted = false;
+    return inst.battleStats;
+  }
+
   function displayName(inst) {
     const sp = species(inst.speciesId);
     return sp ? sp.name : 'Resonant';
@@ -159,7 +180,12 @@
     const inst = save.choir[save.active];
     if (!inst || inst.vigor <= 0) return gain;
     inst.experience += Math.max(1, gain);
-    inst.resonance = Math.min(255, inst.resonance + 3);
+    inst.resonance = Math.min(255, inst.resonance + 8);
+    const bs = ensureBattleStats(inst);
+    bs.bondPeak = Math.max(bs.bondPeak, inst.resonance);
+    const primary = species(inst.speciesId).primary;
+    bs.winsByHarmonic[primary] = (bs.winsByHarmonic[primary] || 0) + 1;
+    if (save.zone) bs.biomes[save.zone] = true;
     let notes = 0;
     while (inst.level < AETHER.LEVEL_CAP && inst.experience >= experienceToAdvance(inst.level)) {
       inst.experience -= experienceToAdvance(inst.level);
@@ -169,7 +195,44 @@
       inst.vigor = Math.max(1, Math.round(inst.stats.vigor * ratio));
       notes += 1;
     }
-    return { gain: gain, levels: notes };
+    return { gain: gain, levels: notes, inst: inst };
+  }
+
+  function evaluateAscension(inst) {
+    if (!inst) return null;
+    const sp = species(inst.speciesId);
+    const rule = sp && sp.ascension;
+    if (!rule) return null;
+    if (inst.level < rule.minLevel || inst.resonance < rule.minResonance) return null;
+    const bs = ensureBattleStats(inst);
+    const c = rule.condition || { kind: 'bond_peak', resonance: rule.minResonance };
+    if (c.kind === 'bond_peak' && bs.bondPeak < c.resonance) return null;
+    if (c.kind === 'no_faint' && bs.fainted) return null;
+    if (c.kind === 'motif_category' && (bs.motifUses[c.cls] || 0) < c.uses) return null;
+    if (c.kind === 'harmonic_affinity' && (bs.winsByHarmonic[c.harmonic] || 0) < c.wins) return null;
+    if (c.kind === 'biome' && !bs.biomes[c.biomeId]) return null;
+    if (!species(rule.to)) return null;
+    return rule;
+  }
+
+  function tryAscend(save, inst, logs) {
+    const rule = evaluateAscension(inst);
+    if (!rule || !inst || inst.vigor <= 0) return false;
+    const prev = displayName(inst);
+    const next = species(rule.to);
+    const ratio = inst.stats.vigor > 0 ? inst.vigor / inst.stats.vigor : 1;
+    inst.speciesId = next.id;
+    inst.stats = statsAt(next.baseStats, inst.level);
+    inst.vigor = Math.max(1, Math.min(inst.stats.vigor, Math.round(inst.stats.vigor * ratio)));
+    inst.knownMotifs = next.learnset.slice();
+    inst.cadence = {};
+    for (let i = 0; i < inst.knownMotifs.length; i++) {
+      inst.cadence[inst.knownMotifs[i]] = motif(inst.knownMotifs[i]).cadenceMax;
+    }
+    inst.ward = normalizeWard(next.baseWard);
+    see(save, next.id, true);
+    if (logs) logs.push(prev + ' ascends into ' + next.name + '.');
+    return true;
   }
 
   function computeDamage(atk, def, m, roll) {
@@ -279,6 +342,10 @@
       logs.push(displayName(attacker) + ' has no Cadence for ' + (m ? m.name : 'that Motif') + '.');
       return;
     }
+    if (attacker.battleStats) {
+      const bs = ensureBattleStats(attacker);
+      bs.motifUses[m.cls] = (bs.motifUses[m.cls] || 0) + 1;
+    }
     const acc = pull(save);
     if (acc > m.accuracy / 100) {
       logs.push(displayName(attacker) + ' plays ' + m.name + ', and it slips wide.');
@@ -300,6 +367,7 @@
     if (battle.kind === 'wild' || battle.kind === 'warden') {
       const gained = grantResonance(save, foe(battle));
       if (gained && gained.levels) logs.push(displayName(active(save)) + ' deepens. Choir level ' + active(save).level + '.');
+      if (gained && gained.inst) tryAscend(save, gained.inst, logs);
     }
     if (battle.foeIndex < battle.foeTeam.length - 1) {
       battle.foeIndex += 1;
@@ -333,6 +401,7 @@
 
   function onPlayerDown(save, battle, logs) {
     logs.push(displayName(active(save)) + ' can no longer hold a phrase.');
+    ensureBattleStats(active(save)).fainted = true;
     if (battle.rules && battle.rules.lockSwitch) {
       battle.result = 'loss';
       save.flags.losses += 1;
@@ -500,6 +569,18 @@
         }
       }
       battle.entered = false;
+      if (battle.result === 'ongoing' && battle.phrases >= 200) {
+        const p = active(save);
+        const f = foe(battle);
+        const pr = p.stats.vigor ? p.vigor / p.stats.vigor : 0;
+        const fr = f && f.stats.vigor ? f.vigor / f.stats.vigor : 0;
+        battle.result = pr >= fr ? 'win' : 'loss';
+        if (battle.result === 'win') {
+          save.flags.wins += 1;
+          if (battle.kind === 'warden' && battle.wardenId) save.flags.sanctums[battle.wardenId] = true;
+        } else save.flags.losses += 1;
+        logs.push('The phrase runs out. The stronger Vigor remains.');
+      }
       return logs;
     }
 
@@ -558,6 +639,8 @@
     save.flags.sanctums = save.flags.sanctums || {};
     for (let i = 0; i < save.choir.length; i++) save.choir[i].ward = normalizeWard(save.choir[i].ward);
     if (save.reserve) save.reserve.ward = normalizeWard(save.reserve.ward);
+    for (let i = 0; i < save.choir.length; i++) ensureBattleStats(save.choir[i]);
+    if (save.reserve) ensureBattleStats(save.reserve);
     return save;
   }
 
@@ -587,6 +670,8 @@
     swapReserve: swapReserve,
     releaseFor: releaseFor,
     normalizeSave: normalizeSave,
+    evaluateAscension: evaluateAscension,
+    tryAscend: tryAscend,
     active: active,
     foe: foe,
     findSpawn: findSpawn

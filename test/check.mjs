@@ -192,6 +192,52 @@ assert(refuseLogs.some((line) => line.indexOf('refuses') !== -1), 'sanctum refus
 assert(calm.vigor === 80, 'refused motif deals no vigor loss');
 
 
+
+const young = engine.freshSave('Surveyor', 'brinember', 21);
+assert(engine.evaluateAscension(young.choir[0]) === null, 'ascension waits for level and resonance');
+young.choir[0].level = 16;
+young.choir[0].resonance = 120;
+young.choir[0].battleStats.bondPeak = 120;
+assert(engine.evaluateAscension(young.choir[0]).to === 'tindflare', 'bond peak ascension');
+const tide = engine.freshSave('Surveyor', 'mortide', 22).choir[0];
+tide.level = 16;
+tide.resonance = 120;
+tide.battleStats.motifUses.Kindling = 4;
+assert(engine.evaluateAscension(tide) === null, 'four kindling uses are short');
+tide.battleStats.motifUses.Kindling = 5;
+assert(engine.evaluateAscension(tide).to === 'lumtide', 'kindling ascension');
+const mesa = engine.freshSave('Surveyor', 'veshcrag', 23).choir[0];
+mesa.level = 16;
+mesa.resonance = 120;
+assert(engine.evaluateAscension(mesa).to === 'oskslab', 'no-faint ascension');
+mesa.battleStats.fainted = true;
+assert(engine.evaluateAscension(mesa) === null, 'a faint blocks that ascension');
+
+const guest = engine.species('draygust');
+guest.ascension = { to: 'wynveil', minLevel: 1, minResonance: 0, condition: { kind: 'biome', biomeId: 'yard' } };
+const walker = engine.freshSave('Surveyor', 'draygust', 24).choir[0];
+walker.battleStats.biomes.yard = true;
+assert(engine.evaluateAscension(walker).to === 'wynveil', 'zone condition');
+guest.ascension = { to: 'wynveil', minLevel: 1, minResonance: 0, condition: { kind: 'harmonic_affinity', harmonic: 'Draft', wins: 2 } };
+walker.battleStats.winsByHarmonic.Draft = 2;
+assert(engine.evaluateAscension(walker).to === 'wynveil', 'harmonic win condition');
+delete guest.ascension;
+
+const longSave = engine.freshSave('Surveyor', 'brinember', 25);
+longSave.choir[0].stats.tempo = 900;
+longSave.choir[0].vigor = longSave.choir[0].stats.vigor;
+const wall = engine.makeInstance(longSave, 'pellslab', 4);
+wall.stats.tempo = 1;
+wall.stats.edge = 99999;
+wall.stats.guard = 99999;
+wall.stats.vigor = 500;
+wall.vigor = 500;
+const longBattle = engine.createBattle([wall], 'wild', null);
+longBattle.phrases = 199;
+engine.stepBattle(longSave, longBattle, { type: 'motif', motifId: longSave.choir[0].knownMotifs[0] });
+assert(longBattle.phrases >= 200, 'phrase counter reaches the cap');
+assert(longBattle.result === 'win' || longBattle.result === 'loss', 'a long phrase still ends');
+
 console.log('resonants: ' + data.RESONANTS.length);
 console.log('assertions passed: ' + passed);
 console.log('assertions failed: ' + failed);

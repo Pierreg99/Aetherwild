@@ -65,7 +65,8 @@
       baseWard: ward('Brine', 'Stratum'),
       learnset: ['hush-ember', 'ember-ring', 'flare-lattice'],
       flavor: 'A cooled shard of starlight that hums when the yard is still.',
-      habitat: ['yard']
+      habitat: ['yard'],
+      ascension: { to: 'tindflare', minLevel: 16, minResonance: 120, condition: { kind: 'bond_peak', resonance: 120 } }
     },
     {
       id: 'kalflare', name: 'Kalflare', primary: 'Cindersong', secondary: null,
@@ -83,7 +84,8 @@
       baseWard: ward('Draft', 'Cindersong'),
       learnset: ['tide-murmur', 'brine-lens', 'melt-ribbon'],
       flavor: 'A standing wave that remembers every shore it has left.',
-      habitat: ['yard']
+      habitat: ['yard'],
+      ascension: { to: 'lumtide', minLevel: 16, minResonance: 120, condition: { kind: 'motif_category', cls: 'Kindling', uses: 5 } }
     },
     {
       id: 'orumelt', name: 'Orumelt', primary: 'Brine', secondary: null,
@@ -101,7 +103,8 @@
       baseWard: ward('Cindersong', 'Draft'),
       learnset: ['crag-hum', 'crag-bind', 'slab-press'],
       flavor: 'A walking mesa with a crack of light for a mouth.',
-      habitat: ['yard']
+      habitat: ['yard'],
+      ascension: { to: 'oskslab', minLevel: 16, minResonance: 120, condition: { kind: 'no_faint' } }
     },
     {
       id: 'pellslab', name: 'Pellslab', primary: 'Stratum', secondary: null,
@@ -220,6 +223,37 @@
       learnset: ['spore-hum', 'blight-seep', 'venom-thread'],
       flavor: 'Porous blight that weeps a bright, bitter thread.',
       habitat: ['ridge']
+    },
+
+    {
+      id: 'tindflare', name: 'Tindflare', primary: 'Cindersong', secondary: null,
+      rarity: 'rare', plan: 'orbiting', artSeed: 20107, pitch: 'High',
+      baseStats: { vigor: 78, focus: 74, guard: 60, spirit: 100, edge: 58, tempo: 86 },
+      baseWard: ward('Cindersong', 'Brine'),
+      learnset: ['coal-spiral', 'ember-ring', 'flare-lattice'],
+      flavor: 'The shard has opened. Two flares now share one orbit.',
+      habitat: [],
+      fromAscension: true
+    },
+    {
+      id: 'lumtide', name: 'Lumtide', primary: 'Brine', secondary: null,
+      rarity: 'rare', plan: 'tidal', artSeed: 21209, pitch: 'Low',
+      baseStats: { vigor: 82, focus: 68, guard: 80, spirit: 88, edge: 72, tempo: 64 },
+      baseWard: ward('Brine', 'Draft'),
+      learnset: ['drown-glass', 'melt-ribbon', 'brine-lens'],
+      flavor: 'A taller tide, lit from inside, that keeps the shore it came from.',
+      habitat: [],
+      fromAscension: true
+    },
+    {
+      id: 'oskslab', name: 'Oskslab', primary: 'Stratum', secondary: null,
+      rarity: 'rare', plan: 'geomorphic', artSeed: 22313, pitch: 'Mid',
+      baseStats: { vigor: 96, focus: 70, guard: 92, spirit: 52, edge: 80, tempo: 48 },
+      baseWard: ward('Stratum', 'Spark'),
+      learnset: ['stone-choir', 'slab-press', 'crag-bind'],
+      flavor: 'The mesa has set. Light runs in a straight seam through the stone.',
+      habitat: [],
+      fromAscension: true
     }
   ];
 
