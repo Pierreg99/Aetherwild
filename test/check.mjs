@@ -547,6 +547,114 @@ const voices = scoreBox.started.length - startedBefore;
 const expected = (audio.phrases.encounter.length + audio.phrases.sanctum.length + audio.phrases.ending.length) * 2;
 assert(voices === expected, 'each score note schedules a tone and an overtone, got ' + voices);
 
+function armMotif(save, id) {
+  const inst = save.choir[0];
+  if (inst.knownMotifs.indexOf(id) === -1) inst.knownMotifs.push(id);
+  inst.cadence[id] = 20;
+  inst.stats.tempo = 900;
+  inst.vigor = inst.stats.vigor;
+}
+const pulseStatus = data.MOTIFS.find((m) => m.effect && m.effect.kind === 'status' && m.effect.status === 'Scorched' && m.accuracy === 100);
+const pulseRecoil = data.MOTIFS.find((m) => m.effect && m.effect.kind === 'recoil' && m.accuracy === 100);
+const guardMotif = data.MOTIFS.find((m) => m.cls === 'Guard' && m.effect && m.effect.kind === 'ward' && m.accuracy === 100);
+assert(pulseStatus && pulseRecoil && guardMotif, 'pulse and guard motifs carry effects');
+
+const scorchedSave = engine.freshSave('Surveyor', 'brinember', 91);
+armMotif(scorchedSave, pulseStatus.id);
+const scorchedFoe = engine.makeInstance(scorchedSave, 'veshcrag', 8);
+scorchedFoe.stats.tempo = 1;
+scorchedFoe.stats.vigor = 400;
+scorchedFoe.vigor = 400;
+const scorchedBattle = engine.createBattle([scorchedFoe], 'wild', null);
+const scorchedLogs = engine.stepBattle(scorchedSave, scorchedBattle, { type: 'motif', motifId: pulseStatus.id });
+assert(scorchedFoe.status === 'Scorched', 'a pulse status lands');
+assert(scorchedLogs.some((line) => line.indexOf('Scorched') !== -1), 'scorched is named in the phrase');
+const midVigor = scorchedFoe.vigor;
+const tickLogs = engine.stepBattle(scorchedSave, scorchedBattle, { type: 'motif', motifId: pulseStatus.id });
+const chipLine = tickLogs.find((line) => line.indexOf('Scorched') !== -1 && line.indexOf('loses') !== -1);
+assert(chipLine, 'scorched ticks at the next phrase');
+const chip = Number(chipLine.match(/loses (\d+)/)[1]);
+assert(chip === Math.max(1, Math.floor(scorchedFoe.stats.vigor / 16)), 'scorched chip is a sixteenth of vigor');
+assert(scorchedFoe.vigor <= midVigor - chip, 'the chip actually comes off');
+const moodAttacker = engine.freshSave('Surveyor', 'brinember', 92).choir[0];
+moodAttacker.level = 24;
+moodAttacker.stats = engine.statsAt(engine.species('brinember').baseStats, 24);
+const moodFoe = engine.makeInstance(engine.freshSave('Surveyor', 'wynveil', 93), 'draygust', 6);
+const openMood = engine.computeDamage(moodAttacker, moodFoe, engine.motif('coal-spiral'), 0.5);
+moodAttacker.status = 'Brambled';
+const cutMood = engine.computeDamage(moodAttacker, moodFoe, engine.motif('coal-spiral'), 0.5);
+assert(cutMood < openMood, 'brambled weakens the phrase');
+
+const recoilSave = engine.freshSave('Surveyor', 'brinember', 94);
+armMotif(recoilSave, pulseRecoil.id);
+const recoilFoe = engine.makeInstance(recoilSave, 'draygust', 2);
+recoilFoe.vigor = 1;
+recoilFoe.stats.tempo = 1;
+const recoilBattle = engine.createBattle([recoilFoe], 'wild', null);
+const full = recoilSave.choir[0].vigor;
+const recoilLogs = engine.stepBattle(recoilSave, recoilBattle, { type: 'motif', motifId: pulseRecoil.id });
+const recoilLine = recoilLogs.find((line) => line.indexOf('recoil') !== -1);
+assert(recoilLine, 'a pulse recoil is logged');
+const back = Number(recoilLine.match(/takes (\d+)/)[1]);
+assert(back >= 1 && recoilSave.choir[0].vigor === full - back, 'recoil spends the singer vigor');
+
+const guardSave = engine.freshSave('Surveyor', 'brinember', 95);
+armMotif(guardSave, guardMotif.id);
+const wardHarmonic = guardMotif.harmonic;
+const wardBefore = guardSave.choir[0].ward[wardHarmonic];
+const guardFoe = engine.makeInstance(guardSave, 'draygust', 2);
+guardFoe.vigor = 1;
+guardFoe.stats.tempo = 1;
+const guardBattle = engine.createBattle([guardFoe], 'wild', null);
+const guardLogs = engine.stepBattle(guardSave, guardBattle, { type: 'motif', motifId: guardMotif.id });
+assert(guardLogs.some((line) => line.indexOf('Ward against ' + wardHarmonic) !== -1), 'a guard motif names the ward');
+assert(guardSave.choir[0].ward[wardHarmonic] < wardBefore, 'the ward multiplier falls as the ward rises');
+assert(guardSave.choir[0].ward[wardHarmonic] >= 0.55, 'a ward does not rise without a floor');
+const probe = data.MOTIFS.find((m) => m.harmonic === wardHarmonic && m.power >= 48);
+const striker = engine.makeInstance(guardSave, 'kalflare', 30);
+const bare = {
+  speciesId: striker.speciesId,
+  level: 30,
+  stats: striker.stats,
+  status: null
+};
+const openWard = Object.assign({}, guardSave.choir[0].ward);
+openWard[wardHarmonic] = wardBefore;
+const takenBefore = engine.computeDamage(bare, Object.assign({}, guardSave.choir[0], { ward: openWard }), probe, 0.5);
+const takenAfter = engine.computeDamage(bare, guardSave.choir[0], probe, 0.5);
+assert(takenAfter < takenBefore, 'a raised ward takes less of that harmonic');
+
+const dimSave = engine.freshSave('Surveyor', 'brinember', 96);
+dimSave.choir[0].status = 'Dimmed';
+dimSave.choir[0].statusLeft = 1;
+dimSave.choir[0].stats.tempo = 900;
+const dimFoe = engine.makeInstance(dimSave, 'veshcrag', 4);
+dimFoe.stats.tempo = 1;
+dimFoe.vigor = 90;
+const dimBattle = engine.createBattle([dimFoe], 'wild', null);
+const dimLogs = engine.stepBattle(dimSave, dimBattle, { type: 'motif', motifId: 'hush-ember' });
+assert(dimLogs.some((line) => line.indexOf('Dimmed') !== -1), 'dimmed holds the phrase');
+assert(dimFoe.vigor === 90, 'a dimmed phrase deals none');
+assert(dimSave.choir[0].status === null, 'dimmed ends after its phrases');
+
+let rivenSkips = 0;
+let rivenActs = 0;
+for (let seed = 1; seed <= 64 && (rivenSkips === 0 || rivenActs === 0); seed++) {
+  const rivenSave = engine.freshSave('Surveyor', 'brinember', seed);
+  rivenSave.choir[0].status = 'Riven';
+  rivenSave.choir[0].stats.tempo = 900;
+  const rivenFoe = engine.makeInstance(rivenSave, 'veshcrag', 4);
+  rivenFoe.stats.tempo = 1;
+  rivenFoe.vigor = 200;
+  const rivenBattle = engine.createBattle([rivenFoe], 'wild', null);
+  const rivenLogs = engine.stepBattle(rivenSave, rivenBattle, { type: 'motif', motifId: 'hush-ember' });
+  if (rivenLogs.some((line) => line.indexOf('phrase breaks') !== -1)) rivenSkips += 1;
+  else if (rivenFoe.vigor < 200) rivenActs += 1;
+}
+assert(rivenSkips > 0 && rivenActs > 0, 'riven sometimes breaks the phrase and sometimes does not');
+engine.healChoir(scorchedSave);
+assert(scorchedSave.choir[0].status === null, 'the lamp clears a status');
+
 console.log('resonants: ' + data.RESONANTS.length);
 console.log('motifs: ' + data.MOTIFS.length);
 console.log('assertions passed: ' + passed);

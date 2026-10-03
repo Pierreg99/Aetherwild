@@ -17,7 +17,7 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 ## Not built yet
 
 - Letting a hum go is permanent when the Choir and the Vault are both full.
-- Secondary Harmonics, status phrases (Dimmed, Riven, Brambled, Scorched), stat stages, and Cadence-empty substitution beyond a hard refusal.
+- Secondary Harmonics, stat stages, and Cadence-empty substitution beyond a hard refusal.
 - The brief's contradictory Ward line that reads the attacker's Ward. Incoming Ward from section 1.4 is what the slice multiplies.
 - A wild Resonant does not answer during the three Hums. On a failed Attunement it simply leaves.
 - TypeScript, Vite, Vitest, Playwright, and the eight toolchain gates. Static files are required so Pages can serve `main` with no build. Checks are `node test/check.mjs`.
@@ -39,8 +39,12 @@ The east gate of Rivet Foundry opens only after all eight Sanctums. Chorus Hall 
 
 ## Score
 
-`js/audio.js` schedules original interval rows with Web Audio: a sine and a quiet triangle a fifth above. Encounter, Sanctum clear, and the Prime Voice ending each have their own row. Nothing is sampled from another piece, and there is no audio file to fetch. Pulse and Guard meet the class counts. They do not yet apply the brief's status, recoil, or ward-raising effects. Those stay with the unbuilt status phrases.
+`js/audio.js` schedules original interval rows with Web Audio: a sine and a quiet triangle a fifth above. Encounter, Sanctum clear, and the Prime Voice ending each have their own row. Nothing is sampled from another piece, and there is no audio file to fetch.
+
+## Pulse and Guard
+
+A Pulse Motif either sets a status or recoils. Scorched and Brambled take a sixteenth of Vigor at the next phrase and cut that singer's damage to three quarters. Dimmed holds the phrase. Riven breaks about one phrase in four. Recoil takes a quarter of the Vigor just dealt, at least 1, from the singer. A Guard Motif raises the singer's Ward against that Motif's Harmonic: the damage-taken multiplier drops by 0.12 and does not go below 0.55. The lamp clears a status.
 
 ## Later
 
-TypeScript, Vite, and Playwright stay open. Static files on `main` are what GitHub Pages serves. Do not mark those gates done until they exist without a required build.
+TypeScript, Vite, and Playwright stay open on purpose. GitHub Pages serves the static files at the root of `main`, so this tree does not take a build step. Do not start that migration here.

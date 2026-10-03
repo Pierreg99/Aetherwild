@@ -101,6 +101,7 @@
       knownMotifs: sp.learnset.slice(),
       resonance: 70,
       experience: 0,
+      status: null,
       battleStats: emptyBattleStats(70)
     };
   }
@@ -253,7 +254,8 @@
     const global = multiplier(m.harmonic, defSp.primary);
     const vary = 0.85 + roll * 0.15;
     const crit = roll < 0.0625 ? 1.5 : 1;
-    return Math.max(1, Math.floor(base * stab * ward * global * vary * crit));
+    const mood = (atk.status === 'Scorched' || atk.status === 'Brambled') ? 0.75 : 1;
+    return Math.max(1, Math.floor(base * stab * ward * global * vary * crit * mood));
   }
 
   function initialGuard(sp, level) {
@@ -283,6 +285,8 @@
 
   function restore(inst) {
     inst.vigor = inst.stats.vigor;
+    inst.status = null;
+    inst.statusLeft = 0;
     for (let i = 0; i < inst.knownMotifs.length; i++) {
       const id = inst.knownMotifs[i];
       inst.cadence[id] = motif(id).cadenceMax;
@@ -346,8 +350,52 @@
     return best;
   }
 
+  function heldPhrase(save, attacker, logs) {
+    if (attacker.status === 'Dimmed') {
+      logs.push(displayName(attacker) + ' is Dimmed and holds the phrase.');
+      attacker.statusLeft = (attacker.statusLeft || 1) - 1;
+      if (attacker.statusLeft <= 0) attacker.status = null;
+      return true;
+    }
+    if (attacker.status === 'Riven' && pull(save) < 0.25) {
+      logs.push(displayName(attacker) + ' is Riven and the phrase breaks.');
+      return true;
+    }
+    return false;
+  }
+
+  function applyMotifEffect(attacker, defender, m, dmg, logs) {
+    const effect = m.effect;
+    if (!effect) return;
+    if (m.cls === 'Pulse' && effect.kind === 'status') {
+      defender.status = effect.status;
+      defender.statusLeft = effect.status === 'Dimmed' ? 2 : 0;
+      logs.push(displayName(defender) + ' is ' + effect.status + '.');
+    } else if (m.cls === 'Pulse' && effect.kind === 'recoil') {
+      const back = Math.max(1, Math.floor(dmg * (effect.ratio || 0.25)));
+      attacker.vigor = Math.max(0, attacker.vigor - back);
+      logs.push(displayName(attacker) + ' takes ' + back + ' Vigor in recoil.');
+    } else if (m.cls === 'Guard' && effect.kind === 'ward') {
+      const h = m.harmonic;
+      const ward = normalizeWard(attacker.ward);
+      const next = Math.max(0.55, Math.round((ward[h] + (effect.delta || -0.12)) * 100) / 100);
+      ward[h] = next;
+      attacker.ward = ward;
+      logs.push('Ward against ' + h + ' rises.');
+    }
+  }
+
+  function tickStatus(inst, logs) {
+    if (!inst || inst.vigor <= 0) return;
+    if (inst.status !== 'Scorched' && inst.status !== 'Brambled') return;
+    const chip = Math.max(1, Math.floor(inst.stats.vigor / 16));
+    inst.vigor = Math.max(0, inst.vigor - chip);
+    logs.push(displayName(inst) + ' is ' + inst.status + ' and loses ' + chip + ' Vigor.');
+  }
+
   function strike(save, attacker, defender, motifId, logs, scale) {
     const m = motif(motifId);
+    if (heldPhrase(save, attacker, logs)) return;
     if (!spend(attacker, motifId)) {
       logs.push(displayName(attacker) + ' has no Cadence for ' + (m ? m.name : 'that Motif') + '.');
       return;
@@ -371,6 +419,7 @@
     else if (felt <= 0.85) line += ' The Harmonic comes apart.';
     if (roll < 0.0625) line += ' A bright phrase.';
     logs.push(line);
+    if (defender.vigor > 0 || dmg >= 0) applyMotifEffect(attacker, defender, m, dmg, logs);
   }
 
   function onFoeDown(save, battle, logs) {
@@ -579,6 +628,11 @@
       }
       battle.phrases += 1;
       battle.entered = false;
+      tickStatus(p, logs);
+      tickStatus(foe(battle), logs);
+      if (p.vigor <= 0) onPlayerDown(save, battle, logs);
+      if (battle.result === 'ongoing' && foe(battle).vigor <= 0) onFoeDown(save, battle, logs);
+      if (battle.result !== 'ongoing') return logs;
       const f = foe(battle);
       const pFirst = p.stats.tempo > f.stats.tempo || (p.stats.tempo === f.stats.tempo && pull(save) < 0.5);
       const order = pFirst ? ['player', 'foe'] : ['foe', 'player'];
