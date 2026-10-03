@@ -1,0 +1,567 @@
+(function (root) {
+  const AETHER = root.AETHER || (typeof require === 'function' ? require('./data.js') : null);
+  if (!AETHER) throw new Error('AETHER data missing');
+
+  function rngNext(seed) {
+    let a = seed >>> 0;
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    const value = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    return { value: value, seed: a };
+  }
+
+  function pull(save) {
+    const n = rngNext(save.rngSeed >>> 0);
+    save.rngSeed = n.seed;
+    return n.value;
+  }
+
+  function species(id) {
+    return AETHER.RESONANTS.find(function (r) { return r.id === id; }) || null;
+  }
+
+  function motif(id) {
+    return AETHER.MOTIFS.find(function (m) { return m.id === id; }) || null;
+  }
+
+  function strongAgainst(harmonic) {
+    return (AETHER.HARMONIC_STRONG[harmonic] || []).slice();
+  }
+
+  function weakAgainst(harmonic) {
+    return AETHER.HARMONICS.filter(function (other) {
+      return strongAgainst(other).indexOf(harmonic) !== -1;
+    });
+  }
+
+  function multiplier(from, to) {
+    if (strongAgainst(from).indexOf(to) !== -1) return 1.5;
+    if (weakAgainst(from).indexOf(to) !== -1) return 0.75;
+    return 1;
+  }
+
+  function normalizeWard(ward) {
+    const out = {};
+    for (let i = 0; i < AETHER.HARMONICS.length; i++) {
+      const h = AETHER.HARMONICS[i];
+      out[h] = ward && typeof ward[h] === 'number' ? ward[h] : 1;
+    }
+    return out;
+  }
+
+  function dominantHarmonic(ward) {
+    const w = normalizeWard(ward);
+    let best = AETHER.HARMONICS[0];
+    let v = -Infinity;
+    for (let i = 0; i < AETHER.HARMONICS.length; i++) {
+      const h = AETHER.HARMONICS[i];
+      if (w[h] > v) { v = w[h]; best = h; }
+    }
+    return best;
+  }
+
+  function statsAt(base, level) {
+    function f(key, extra) {
+      return Math.max(1, Math.floor(base[key] * level / 28) + extra);
+    }
+    return {
+      vigor: Math.max(10, Math.floor(base.vigor * level / 22) + 12),
+      focus: f('focus', 5),
+      guard: f('guard', 5),
+      spirit: f('spirit', 5),
+      edge: f('edge', 5),
+      tempo: f('tempo', 5)
+    };
+  }
+
+  function takeUid(save) {
+    save.nextUid = save.nextUid || 1;
+    const id = 'u' + save.nextUid;
+    save.nextUid += 1;
+    return id;
+  }
+
+  function makeInstance(save, speciesId, level) {
+    const sp = species(speciesId);
+    const stats = statsAt(sp.baseStats, level);
+    const cadence = {};
+    for (let i = 0; i < sp.learnset.length; i++) {
+      const id = sp.learnset[i];
+      cadence[id] = motif(id).cadenceMax;
+    }
+    return {
+      uid: takeUid(save),
+      speciesId: speciesId,
+      level: level,
+      stats: stats,
+      vigor: stats.vigor,
+      ward: normalizeWard(sp.baseWard),
+      cadence: cadence,
+      knownMotifs: sp.learnset.slice(),
+      resonance: 70,
+      experience: 0
+    };
+  }
+
+  function findSpawn(zone, mark) {
+    const map = zone.map;
+    for (let y = 0; y < map.length; y++) {
+      const x = map[y].indexOf(mark);
+      if (x !== -1) return { x: x, y: y };
+    }
+    return { x: 1, y: 1 };
+  }
+
+  function freshSave(name, speciesId, seed) {
+    const zone = AETHER.ZONES.yard;
+    const spawn = findSpawn(zone, '@');
+    const save = {
+      version: AETHER.SAVE_VERSION,
+      surveyor: name || 'Surveyor',
+      zone: 'yard',
+      x: spawn.x,
+      y: spawn.y,
+      active: 0,
+      choir: [],
+      reserve: null,
+      index: {},
+      flags: { sanctums: {}, conductorHeard: false, wins: 0, losses: 0, keeper: false },
+      storyBeat: 'yard',
+      rngSeed: (seed >>> 0) || 1,
+      nextUid: 1
+    };
+    const inst = makeInstance(save, speciesId, 6);
+    inst.resonance = 70;
+    save.choir.push(inst);
+    see(save, speciesId, true);
+    return save;
+  }
+
+  function see(save, speciesId, attuned) {
+    const prev = save.index[speciesId] || { seen: false, attuned: false };
+    save.index[speciesId] = { seen: true, attuned: prev.attuned || !!attuned };
+  }
+
+  function displayName(inst) {
+    const sp = species(inst.speciesId);
+    return sp ? sp.name : 'Resonant';
+  }
+
+  function experienceToAdvance(level) {
+    return (level + 1) * (level + 1) * 6;
+  }
+
+  function grantResonance(save, foe) {
+    const sp = species(foe.speciesId);
+    const factor = { common: 1, uncommon: 1.15, rare: 1.3, mythic: 1.5 }[sp.rarity] || 1;
+    const gain = Math.floor((6 * foe.level * foe.level) / 7 * factor);
+    const inst = save.choir[save.active];
+    if (!inst || inst.vigor <= 0) return gain;
+    inst.experience += Math.max(1, gain);
+    inst.resonance = Math.min(255, inst.resonance + 3);
+    let notes = 0;
+    while (inst.level < AETHER.LEVEL_CAP && inst.experience >= experienceToAdvance(inst.level)) {
+      inst.experience -= experienceToAdvance(inst.level);
+      inst.level += 1;
+      const ratio = inst.stats.vigor > 0 ? inst.vigor / inst.stats.vigor : 0;
+      inst.stats = statsAt(sp.baseStats ? species(inst.speciesId).baseStats : sp.baseStats, inst.level);
+      inst.vigor = Math.max(1, Math.round(inst.stats.vigor * ratio));
+      notes += 1;
+    }
+    return { gain: gain, levels: notes };
+  }
+
+  function computeDamage(atk, def, m, roll) {
+    if (!m || !m.power) return 0;
+    const atkSp = species(atk.speciesId);
+    const defSp = species(def.speciesId);
+    const harmonicClass = AETHER.HARMONICS.indexOf(m.cls) !== -1;
+    const atkStat = harmonicClass ? atk.stats.spirit : atk.stats.focus;
+    const defStat = Math.max(1, harmonicClass ? def.stats.edge : def.stats.guard);
+    const raw = Math.floor((((2 * atk.level) / 5 + 2) * m.power * atkStat) / defStat);
+    const base = raw / 50 + 2;
+    const stab = m.harmonic === atkSp.primary || m.harmonic === atkSp.secondary ? 1.25 : 1;
+    // Section 1.4: ward[h] is damage taken from Harmonic h. Defender ward, not attacker.
+    const ward = normalizeWard(def.ward)[m.harmonic];
+    const global = multiplier(m.harmonic, defSp.primary);
+    const vary = 0.85 + roll * 0.15;
+    const crit = roll < 0.0625 ? 1.5 : 1;
+    return Math.max(1, Math.floor(base * stab * ward * global * vary * crit));
+  }
+
+  function initialGuard(sp, level) {
+    const rarity = { common: 10, uncommon: 22, rare: 34, mythic: 48 }[sp.rarity] || 10;
+    const wards = AETHER.HARMONICS.map(function (h) { return sp.baseWard[h]; });
+    const spread = Math.max.apply(null, wards) - Math.min.apply(null, wards);
+    return Math.round(28 + level * 6 + rarity + spread * 20);
+  }
+
+  function resolveHum(sp, hum, guard) {
+    const dom = dominantHarmonic(sp.baseWard);
+    let delta = 15;
+    let note = 'The Hum is wrong. Guard rises.';
+    if (hum.harmonic && hum.harmonic === dom) {
+      delta = -45;
+      note = 'The Hum matches the Ward spike. Guard cracks.';
+    } else if (hum.pitch && hum.pitch === sp.pitch) {
+      delta = -25;
+      note = 'The pitch class rings true. Guard thins.';
+    }
+    if (hum.kindling) {
+      delta -= 10;
+      note += ' A Kindling Motif loosens it further.';
+    }
+    return { guard: Math.max(0, guard + delta), delta: delta, note: note, dominant: dom };
+  }
+
+  function restore(inst) {
+    inst.vigor = inst.stats.vigor;
+    for (let i = 0; i < inst.knownMotifs.length; i++) {
+      const id = inst.knownMotifs[i];
+      inst.cadence[id] = motif(id).cadenceMax;
+    }
+  }
+
+  function healChoir(save) {
+    for (let i = 0; i < save.choir.length; i++) restore(save.choir[i]);
+    if (save.reserve) restore(save.reserve);
+  }
+
+  function livingIndexes(save) {
+    const out = [];
+    for (let i = 0; i < save.choir.length; i++) if (save.choir[i].vigor > 0) out.push(i);
+    return out;
+  }
+
+  function createBattle(foes, kind, wardenId) {
+    return {
+      kind: kind,
+      wardenId: wardenId || null,
+      foeTeam: foes,
+      foeIndex: 0,
+      result: 'ongoing',
+      mustSwitch: false,
+      attune: null,
+      placed: null,
+      phrases: 0,
+      log: [kind === 'warden' ? 'The Sanctum answers.' : 'A wild Resonant holds the grass.']
+    };
+  }
+
+  function foe(battle) { return battle.foeTeam[battle.foeIndex]; }
+  function active(save) { return save.choir[save.active]; }
+
+  function spend(inst, motifId) {
+    const m = motif(motifId);
+    if (!m || (inst.cadence[motifId] || 0) < m.cadenceCost) return false;
+    inst.cadence[motifId] -= m.cadenceCost;
+    return true;
+  }
+
+  function chooseFoeMotif(foeInst, playerInst) {
+    let best = null;
+    let score = -1;
+    for (let i = 0; i < foeInst.knownMotifs.length; i++) {
+      const id = foeInst.knownMotifs[i];
+      const m = motif(id);
+      if ((foeInst.cadence[id] || 0) < m.cadenceCost) continue;
+      const s = m.power * multiplier(m.harmonic, species(playerInst.speciesId).primary);
+      if (s > score) { score = s; best = id; }
+    }
+    return best;
+  }
+
+  function strike(save, attacker, defender, motifId, logs) {
+    const m = motif(motifId);
+    if (!spend(attacker, motifId)) {
+      logs.push(displayName(attacker) + ' has no Cadence for ' + (m ? m.name : 'that Motif') + '.');
+      return;
+    }
+    const acc = pull(save);
+    if (acc > m.accuracy / 100) {
+      logs.push(displayName(attacker) + ' plays ' + m.name + ', and it slips wide.');
+      return;
+    }
+    const roll = pull(save);
+    const dmg = computeDamage(attacker, defender, m, roll);
+    defender.vigor = Math.max(0, defender.vigor - dmg);
+    const felt = multiplier(m.harmonic, species(defender.speciesId).primary) * normalizeWard(defender.ward)[m.harmonic];
+    let line = displayName(attacker) + ' plays ' + m.name + '. ' + displayName(defender) + ' loses ' + dmg + ' Vigor.';
+    if (felt >= 1.45) line += ' The Harmonic rings hard.';
+    else if (felt <= 0.85) line += ' The Harmonic comes apart.';
+    if (roll < 0.0625) line += ' A bright phrase.';
+    logs.push(line);
+  }
+
+  function onFoeDown(save, battle, logs) {
+    logs.push(displayName(foe(battle)) + ' goes quiet.');
+    if (battle.kind === 'wild' || battle.kind === 'warden') {
+      const gained = grantResonance(save, foe(battle));
+      if (gained && gained.levels) logs.push(displayName(active(save)) + ' deepens. Choir level ' + active(save).level + '.');
+    }
+    if (battle.foeIndex < battle.foeTeam.length - 1) {
+      battle.foeIndex += 1;
+      battle.entered = true;
+      logs.push(displayName(foe(battle)) + ' answers the phrase.');
+    } else {
+      battle.result = 'win';
+      save.flags.wins += 1;
+      if (battle.kind === 'warden') {
+        save.flags.sanctums[battle.wardenId] = true;
+        save.storyBeat = 'sanctum-cleared';
+        logs.push('The Warden has no further Resonant.');
+      } else {
+        logs.push('The grass is quiet again.');
+      }
+    }
+  }
+
+  function onPlayerDown(save, battle, logs) {
+    logs.push(displayName(active(save)) + ' can no longer hold a phrase.');
+    if (livingIndexes(save).length === 0) {
+      battle.result = 'loss';
+      save.flags.losses += 1;
+      logs.push('Your Choir falls silent.');
+    } else {
+      battle.mustSwitch = true;
+      logs.push('Call another Resonant.');
+    }
+  }
+
+  function foeActs(save, battle, logs) {
+    const f = foe(battle);
+    const p = active(save);
+    if (!f || f.vigor <= 0 || !p || p.vigor <= 0) return;
+    const id = chooseFoeMotif(f, p);
+    if (!id) {
+      logs.push(displayName(f) + ' holds the phrase.');
+      return;
+    }
+    strike(save, f, p, id, logs);
+    if (p.vigor <= 0) onPlayerDown(save, battle, logs);
+  }
+
+  function placeAttuned(save, inst) {
+    see(save, inst.speciesId, true);
+    if (save.choir.length < AETHER.CHOIR_MAX) {
+      save.choir.push(inst);
+      return 'choir';
+    }
+    if (!save.reserve) {
+      save.reserve = inst;
+      return 'reserve';
+    }
+    return 'overflow';
+  }
+
+  function stepBattle(save, battle, action) {
+    const logs = [];
+    if (!battle || battle.result !== 'ongoing') return logs;
+
+    if (battle.mustSwitch) {
+      if (!action || action.type !== 'switch') {
+        logs.push('Call another Resonant.');
+        return logs;
+      }
+      if (!switchTo(save, action.index, logs)) return logs;
+      battle.mustSwitch = false;
+      return logs;
+    }
+
+    if (battle.attune) {
+      if (!action || action.type !== 'hum') {
+        logs.push('Choose a Hum.');
+        return logs;
+      }
+      const sp = species(foe(battle).speciesId);
+      const res = resolveHum(sp, action, battle.attune.guard);
+      battle.attune.guard = res.guard;
+      battle.attune.slots -= 1;
+      logs.push(res.note + ' Guard is ' + res.guard + '.');
+      if (res.guard <= 0) {
+        const wild = foe(battle);
+        const inst = makeInstance(save, wild.speciesId, wild.level);
+        inst.resonance = 70;
+        inst.ward = normalizeWard(wild.ward);
+        const where = placeAttuned(save, inst);
+        battle.placed = where;
+        battle.overflow = where === 'overflow' ? inst : null;
+        battle.result = 'attuned';
+        logs.push(displayName(inst) + ' attunes and is recorded in the Harmonic Index.');
+        if (where === 'choir') logs.push('It joins your Choir.');
+        if (where === 'reserve') logs.push('The Choir is full. It waits in reserve.');
+        if (where === 'overflow') logs.push('Choir and reserve are full. Choose who lets the hum go.');
+      } else if (battle.attune.slots <= 0) {
+        battle.result = 'fled';
+        logs.push('Guard holds. The Resonant leaves.');
+      }
+      return logs;
+    }
+
+    if (!action) return logs;
+
+    if (action.type === 'switch') {
+      const before = save.active;
+      if (!switchTo(save, action.index, logs)) return logs;
+      if (save.active !== before && foe(battle).vigor > 0) foeActs(save, battle, logs);
+      return logs;
+    }
+
+    if (action.type === 'flee') {
+      if (battle.kind !== 'wild') {
+        logs.push('You cannot leave a Sanctum phrase.');
+        return logs;
+      }
+      const chance = Math.max(0.2, Math.min(0.85, 0.45 + (active(save).stats.tempo - foe(battle).stats.tempo) / 250));
+      if (pull(save) < chance) {
+        battle.result = 'fled';
+        logs.push('You leave the phrase unfinished.');
+      } else {
+        logs.push('The Resonant stays close.');
+        foeActs(save, battle, logs);
+      }
+      return logs;
+    }
+
+    if (action.type === 'attune-start') {
+      if (battle.kind !== 'wild') {
+        logs.push('A Warden does not attune.');
+        return logs;
+      }
+      const p = active(save);
+      if (p.vigor / p.stats.vigor < 0.25) {
+        battle.result = 'fled';
+        logs.push('Your Vigor is too thin. The wild Resonant slips the chord.');
+        return logs;
+      }
+      const sp = species(foe(battle).speciesId);
+      const g = initialGuard(sp, foe(battle).level);
+      battle.attune = { guard: g, max: g, slots: 3 };
+      logs.push('Attunement opens. Guard is ' + g + '. Three Hums remain.');
+      return logs;
+    }
+
+    if (action.type === 'motif') {
+      const m = motif(action.motifId);
+      const p = active(save);
+      if (!m || p.knownMotifs.indexOf(action.motifId) === -1) {
+        logs.push('That Motif is not known.');
+        return logs;
+      }
+      if ((p.cadence[action.motifId] || 0) < m.cadenceCost) {
+        logs.push('Not enough Cadence.');
+        return logs;
+      }
+      battle.phrases += 1;
+      battle.entered = false;
+      const f = foe(battle);
+      const pFirst = p.stats.tempo > f.stats.tempo || (p.stats.tempo === f.stats.tempo && pull(save) < 0.5);
+      const order = pFirst ? ['player', 'foe'] : ['foe', 'player'];
+      for (let i = 0; i < order.length; i++) {
+        if (battle.result !== 'ongoing') break;
+        if (order[i] === 'player') {
+          if (p.vigor <= 0) continue;
+          const target = foe(battle);
+          strike(save, p, target, action.motifId, logs);
+          if (target.vigor <= 0) onFoeDown(save, battle, logs);
+        } else if (!battle.entered && foe(battle).vigor > 0 && p.vigor > 0) {
+          foeActs(save, battle, logs);
+        }
+      }
+      battle.entered = false;
+      return logs;
+    }
+
+    logs.push('The phrase does not answer that.');
+    return logs;
+  }
+
+  function switchTo(save, index, logs) {
+    if (index < 0 || index >= save.choir.length) {
+      logs.push('No Resonant stands there.');
+      return false;
+    }
+    if (save.choir[index].vigor <= 0) {
+      logs.push(displayName(save.choir[index]) + ' has no Vigor.');
+      return false;
+    }
+    if (index === save.active && active(save).vigor > 0) {
+      logs.push(displayName(active(save)) + ' is already forward.');
+      return false;
+    }
+    save.active = index;
+    logs.push(displayName(save.choir[index]) + ' comes forward.');
+    return true;
+  }
+
+  function swapReserve(save, choirIndex) {
+    if (choirIndex < 0 || choirIndex >= save.choir.length || !save.reserve) return false;
+    const next = save.reserve;
+    save.reserve = save.choir[choirIndex];
+    save.choir[choirIndex] = next;
+    if (save.choir[save.active].vigor <= 0) {
+      const live = livingIndexes(save);
+      if (live.length) save.active = live[0];
+    }
+    return true;
+  }
+
+  function releaseFor(save, slot, inst) {
+    if (slot === 'reserve') {
+      save.reserve = inst;
+      return true;
+    }
+    const index = slot;
+    if (index < 0 || index >= save.choir.length) return false;
+    save.choir[index] = inst;
+    if (save.choir[index].vigor <= 0) save.choir[index].vigor = save.choir[index].stats.vigor;
+    return true;
+  }
+
+  function normalizeSave(save) {
+    if (!save || save.version !== AETHER.SAVE_VERSION) return null;
+    for (let i = 0; i < AETHER.SAVE_SCHEMA_KEYS.length; i++) {
+      if (!(AETHER.SAVE_SCHEMA_KEYS[i] in save)) return null;
+    }
+    save.nextUid = save.nextUid || 1;
+    save.flags.sanctums = save.flags.sanctums || {};
+    for (let i = 0; i < save.choir.length; i++) save.choir[i].ward = normalizeWard(save.choir[i].ward);
+    if (save.reserve) save.reserve.ward = normalizeWard(save.reserve.ward);
+    return save;
+  }
+
+  const api = {
+    rngNext: rngNext,
+    pull: pull,
+    species: species,
+    motif: motif,
+    strongAgainst: strongAgainst,
+    weakAgainst: weakAgainst,
+    multiplier: multiplier,
+    normalizeWard: normalizeWard,
+    dominantHarmonic: dominantHarmonic,
+    statsAt: statsAt,
+    makeInstance: makeInstance,
+    freshSave: freshSave,
+    see: see,
+    displayName: displayName,
+    experienceToAdvance: experienceToAdvance,
+    computeDamage: computeDamage,
+    initialGuard: initialGuard,
+    resolveHum: resolveHum,
+    healChoir: healChoir,
+    createBattle: createBattle,
+    stepBattle: stepBattle,
+    placeAttuned: placeAttuned,
+    swapReserve: swapReserve,
+    releaseFor: releaseFor,
+    normalizeSave: normalizeSave,
+    active: active,
+    foe: foe,
+    findSpawn: findSpawn
+  };
+
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  root.AetherEngine = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
