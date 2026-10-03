@@ -234,10 +234,11 @@
     return out;
   }
 
-  function createBattle(foes, kind, wardenId) {
+  function createBattle(foes, kind, wardenId, rules) {
     return {
       kind: kind,
       wardenId: wardenId || null,
+      rules: rules || null,
       foeTeam: foes,
       foeIndex: 0,
       result: 'ongoing',
@@ -317,8 +318,27 @@
     }
   }
 
+  function maybeRelief(battle, target, logs) {
+    if (!battle.rules || !battle.rules.reliefAtHalf) return;
+    if (!target || target.vigor <= 0 || target.vigor * 2 >= target.stats.vigor) return;
+    if (battle.foeIndex >= battle.foeTeam.length - 1) return;
+    battle.halfSpent = battle.halfSpent || {};
+    if (battle.halfSpent[battle.foeIndex]) return;
+    battle.halfSpent[battle.foeIndex] = true;
+    logs.push(displayName(target) + ' withdraws while it can still sing.');
+    battle.foeIndex += 1;
+    battle.entered = true;
+    logs.push(displayName(foe(battle)) + ' answers the phrase.');
+  }
+
   function onPlayerDown(save, battle, logs) {
     logs.push(displayName(active(save)) + ' can no longer hold a phrase.');
+    if (battle.rules && battle.rules.lockSwitch) {
+      battle.result = 'loss';
+      save.flags.losses += 1;
+      logs.push('The Sanctum keeps the rest of the Choir back.');
+      return;
+    }
     if (livingIndexes(save).length === 0) {
       battle.result = 'loss';
       save.flags.losses += 1;
@@ -402,6 +422,10 @@
     if (!action) return logs;
 
     if (action.type === 'switch') {
+      if (battle.rules && battle.rules.lockSwitch) {
+        logs.push('This Sanctum will not hear a call.');
+        return logs;
+      }
       const before = save.active;
       if (!switchTo(save, action.index, logs)) return logs;
       if (save.active !== before && foe(battle).vigor > 0) foeActs(save, battle, logs);
@@ -463,8 +487,14 @@
         if (order[i] === 'player') {
           if (p.vigor <= 0) continue;
           const target = foe(battle);
-          strike(save, p, target, action.motifId, logs);
-          if (target.vigor <= 0) onFoeDown(save, battle, logs);
+          if (battle.rules && battle.rules.primaryLock && m.harmonic !== species(p.speciesId).primary) {
+            spend(p, action.motifId);
+            logs.push('The Sanctum refuses ' + m.name + '.');
+          } else {
+            strike(save, p, target, action.motifId, logs);
+            if (target.vigor <= 0) onFoeDown(save, battle, logs);
+            else maybeRelief(battle, target, logs);
+          }
         } else if (!battle.entered && foe(battle).vigor > 0 && p.vigor > 0) {
           foeActs(save, battle, logs);
         }

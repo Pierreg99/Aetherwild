@@ -1,13 +1,14 @@
 (function (root) {
-  const HARMONICS = ['Cindersong', 'Brine', 'Stratum', 'Draft'];
+  const HARMONICS = ['Cindersong', 'Brine', 'Stratum', 'Draft', 'Gloom', 'Biteroot', 'Rivet', 'Spark', 'Bile'];
 
   // Circulant: each Harmonic is strong against the next two. Weakness is the inverse.
-  const HARMONIC_STRONG = {
-    Cindersong: ['Brine', 'Stratum'],
-    Brine: ['Stratum', 'Draft'],
-    Stratum: ['Draft', 'Cindersong'],
-    Draft: ['Cindersong', 'Brine']
-  };
+  const HARMONIC_STRONG = {};
+  for (let i = 0; i < HARMONICS.length; i++) {
+    HARMONIC_STRONG[HARMONICS[i]] = [
+      HARMONICS[(i + 1) % HARMONICS.length],
+      HARMONICS[(i + 2) % HARMONICS.length]
+    ];
+  }
 
   const MOTIFS = [
     { id: 'hush-ember', name: 'Hush Ember', harmonic: 'Cindersong', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A small heat-hum used while Attuning.' },
@@ -25,11 +26,32 @@
     { id: 'gust-thread', name: 'Gust Thread', harmonic: 'Draft', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A thin air-hum used while Attuning.' },
     { id: 'veil-shear', name: 'Veil Shear', harmonic: 'Draft', cls: 'Draft', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 12, description: 'A cut of moving air.' },
     { id: 'veil-rush', name: 'Veil Rush', harmonic: 'Draft', cls: 'Draft', power: 64, accuracy: 90, cadenceCost: 4, cadenceMax: 8, harmony: 8, description: 'A sudden crowded gust.' },
-    { id: 'draft-needle', name: 'Draft Needle', harmonic: 'Draft', cls: 'Draft', power: 38, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A narrow needle of wind.' }
+    { id: 'draft-needle', name: 'Draft Needle', harmonic: 'Draft', cls: 'Draft', power: 38, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A narrow needle of wind.' },
+    { id: 'dusk-whisper', name: 'Dusk Whisper', harmonic: 'Gloom', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A dusk-hum used while Attuning.' },
+    { id: 'shade-fold', name: 'Shade Fold', harmonic: 'Gloom', cls: 'Gloom', power: 48, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 12, description: 'A fold of quiet shade.' },
+    { id: 'hollow-chord', name: 'Hollow Chord', harmonic: 'Gloom', cls: 'Gloom', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 6, description: 'A chord from an empty place.' },
+    { id: 'dusk-ring', name: 'Dusk Ring', harmonic: 'Gloom', cls: 'Gloom', power: 36, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A slow ring of dusk.' },
+    { id: 'thorn-lull', name: 'Thorn Lull', harmonic: 'Biteroot', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A thorn-hum used while Attuning.' },
+    { id: 'bloom-latch', name: 'Bloom Latch', harmonic: 'Biteroot', cls: 'Biteroot', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 12, description: 'A bloom that closes on contact.' },
+    { id: 'frond-rake', name: 'Frond Rake', harmonic: 'Biteroot', cls: 'Biteroot', power: 68, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 6, description: 'Long fronds drawn inward.' },
+    { id: 'thorn-bind', name: 'Thorn Bind', harmonic: 'Biteroot', cls: 'Biteroot', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'Thorns knot a held note.' },
+    { id: 'bolt-hum', name: 'Bolt Hum', harmonic: 'Rivet', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A metal-hum used while Attuning.' },
+    { id: 'rivet-press', name: 'Rivet Press', harmonic: 'Rivet', cls: 'Rivet', power: 52, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 10, description: 'A press of set rivets.' },
+    { id: 'anvil-chord', name: 'Anvil Chord', harmonic: 'Rivet', cls: 'Rivet', power: 70, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 6, description: 'One heavy metal chord.' },
+    { id: 'bolt-shear', name: 'Bolt Shear', harmonic: 'Rivet', cls: 'Rivet', power: 36, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A short shear of force.' },
+    { id: 'arc-hum', name: 'Arc Hum', harmonic: 'Spark', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A spark-hum used while Attuning.' },
+    { id: 'flick-lane', name: 'Flick Lane', harmonic: 'Spark', cls: 'Spark', power: 46, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 12, description: 'A lane of quick light.' },
+    { id: 'charge-crown', name: 'Charge Crown', harmonic: 'Spark', cls: 'Spark', power: 68, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 6, description: 'A crown of stored charge.' },
+    { id: 'arc-needle', name: 'Arc Needle', harmonic: 'Spark', cls: 'Spark', power: 38, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A needle-thin arc.' },
+    { id: 'spore-hum', name: 'Spore Hum', harmonic: 'Bile', cls: 'Kindling', power: 24, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 46, description: 'A spore-hum used while Attuning.' },
+    { id: 'blight-seep', name: 'Blight Seep', harmonic: 'Bile', cls: 'Bile', power: 50, accuracy: 95, cadenceCost: 3, cadenceMax: 12, harmony: 12, description: 'A seep of bitter light.' },
+    { id: 'venom-thread', name: 'Venom Thread', harmonic: 'Bile', cls: 'Bile', power: 66, accuracy: 85, cadenceCost: 4, cadenceMax: 8, harmony: 6, description: 'Threads of sharp residue.' },
+    { id: 'spore-ring', name: 'Spore Ring', harmonic: 'Bile', cls: 'Bile', power: 34, accuracy: 100, cadenceCost: 2, cadenceMax: 14, harmony: 16, description: 'A ring of drifting spores.' }
   ];
 
   function ward(spike, resist) {
-    const w = { Cindersong: 1, Brine: 1, Stratum: 1, Draft: 1 };
+    const w = {};
+    for (let i = 0; i < HARMONICS.length; i++) w[HARMONICS[i]] = 1;
     w[spike] = 1.45;
     w[resist] = 0.72;
     return w;
@@ -107,6 +129,97 @@
       learnset: ['gust-thread', 'veil-shear', 'veil-rush'],
       flavor: 'A coil of veil-wind that tightens when it is watched.',
       habitat: ['yard']
+    },
+
+    {
+      id: 'nyxshade', name: 'Nyxshade', primary: 'Gloom', secondary: null,
+      rarity: 'common', plan: 'porous', artSeed: 9913, pitch: 'Mid',
+      baseStats: { vigor: 70, focus: 44, guard: 50, spirit: 72, edge: 58, tempo: 48 },
+      baseWard: ward('Spark', 'Cindersong'),
+      learnset: ['dusk-whisper', 'dusk-ring', 'shade-fold'],
+      flavor: 'A porous dusk that keeps small silences in its holes.',
+      habitat: ['marches']
+    },
+    {
+      id: 'nixadusk', name: 'Nixadusk', primary: 'Gloom', secondary: null,
+      rarity: 'uncommon', plan: 'coiled', artSeed: 10111, pitch: 'Low',
+      baseStats: { vigor: 64, focus: 58, guard: 46, spirit: 90, edge: 52, tempo: 96 },
+      baseWard: ward('Gloom', 'Brine'),
+      learnset: ['dusk-whisper', 'shade-fold', 'hollow-chord'],
+      flavor: 'A coil of dusk that tightens when a phrase ends.',
+      habitat: ['marches']
+    },
+    {
+      id: 'virethorn', name: 'Virethorn', primary: 'Biteroot', secondary: null,
+      rarity: 'common', plan: 'bloom', artSeed: 11221, pitch: 'Mid',
+      baseStats: { vigor: 76, focus: 50, guard: 54, spirit: 68, edge: 60, tempo: 40 },
+      baseWard: ward('Cindersong', 'Rivet'),
+      learnset: ['thorn-lull', 'thorn-bind', 'bloom-latch'],
+      flavor: 'A bloom of thorns that opens only to a matching hum.',
+      habitat: ['marches']
+    },
+    {
+      id: 'solmbloom', name: 'Solmbloom', primary: 'Biteroot', secondary: null,
+      rarity: 'uncommon', plan: 'filament', artSeed: 12323, pitch: 'High',
+      baseStats: { vigor: 72, focus: 66, guard: 58, spirit: 84, edge: 62, tempo: 70 },
+      baseWard: ward('Biteroot', 'Draft'),
+      learnset: ['thorn-lull', 'bloom-latch', 'frond-rake'],
+      flavor: 'Filaments tipped with pale blooms, each one a held note.',
+      habitat: ['cut']
+    },
+    {
+      id: 'quinbolt', name: 'Quinbolt', primary: 'Rivet', secondary: null,
+      rarity: 'common', plan: 'lattice', artSeed: 13427, pitch: 'Low',
+      baseStats: { vigor: 68, focus: 78, guard: 72, spirit: 36, edge: 64, tempo: 44 },
+      baseWard: ward('Spark', 'Bile'),
+      learnset: ['bolt-hum', 'bolt-shear', 'rivet-press'],
+      flavor: 'A walking lattice of bolts that ticks in three-time.',
+      habitat: ['cut']
+    },
+    {
+      id: 'thurbolt', name: 'Thurbolt', primary: 'Rivet', secondary: null,
+      rarity: 'uncommon', plan: 'geomorphic', artSeed: 14531, pitch: 'High',
+      baseStats: { vigor: 84, focus: 80, guard: 86, spirit: 48, edge: 70, tempo: 40 },
+      baseWard: ward('Rivet', 'Gloom'),
+      learnset: ['bolt-hum', 'rivet-press', 'anvil-chord'],
+      flavor: 'A squat anvil-body that answers only heavy phrases.',
+      habitat: ['cut']
+    },
+    {
+      id: 'myrrarc', name: 'Myrrarc', primary: 'Spark', secondary: null,
+      rarity: 'common', plan: 'orbiting', artSeed: 15641, pitch: 'High',
+      baseStats: { vigor: 58, focus: 60, guard: 40, spirit: 74, edge: 42, tempo: 92 },
+      baseWard: ward('Brine', 'Stratum'),
+      learnset: ['arc-hum', 'arc-needle', 'flick-lane'],
+      flavor: 'A bright arc chasing itself around an empty center.',
+      habitat: ['ridge']
+    },
+    {
+      id: 'sevflick', name: 'Sevflick', primary: 'Spark', secondary: null,
+      rarity: 'uncommon', plan: 'filament', artSeed: 16753, pitch: 'Mid',
+      baseStats: { vigor: 62, focus: 72, guard: 44, spirit: 98, edge: 46, tempo: 88 },
+      baseWard: ward('Spark', 'Biteroot'),
+      learnset: ['arc-hum', 'flick-lane', 'charge-crown'],
+      flavor: 'Seven filaments that flick between charge and quiet.',
+      habitat: ['ridge']
+    },
+    {
+      id: 'karuspore', name: 'Karuspore', primary: 'Bile', secondary: null,
+      rarity: 'common', plan: 'colonial', artSeed: 17863, pitch: 'Low',
+      baseStats: { vigor: 80, focus: 48, guard: 62, spirit: 70, edge: 74, tempo: 36 },
+      baseWard: ward('Stratum', 'Draft'),
+      learnset: ['spore-hum', 'spore-ring', 'blight-seep'],
+      flavor: 'A colony of spores that shares one slow pulse.',
+      habitat: ['ridge']
+    },
+    {
+      id: 'vireblight', name: 'Vireblight', primary: 'Bile', secondary: null,
+      rarity: 'uncommon', plan: 'porous', artSeed: 18971, pitch: 'High',
+      baseStats: { vigor: 76, focus: 64, guard: 70, spirit: 82, edge: 78, tempo: 48 },
+      baseWard: ward('Bile', 'Cindersong'),
+      learnset: ['spore-hum', 'blight-seep', 'venom-thread'],
+      flavor: 'Porous blight that weeps a bright, bitter thread.',
+      habitat: ['ridge']
     }
   ];
 
@@ -123,7 +236,58 @@
     '#....gggggg........#',
     '#....gggggg........#',
     '#..................#',
-    '#@...............D.#',
+    '#@..............rD.#',
+    '####################'
+  ];
+
+  const MARCHES = [
+    '####################',
+    '#eH................#',
+    '#......gggggg......#',
+    '#..N...gggggg......#',
+    '#......gggggg......#',
+    '#..................#',
+    '#.....SSSS.........#',
+    '#.....SSSS.........#',
+    '#..........gggg....#',
+    '#..........gggg....#',
+    '#~~................#',
+    '#~~................#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+  const CUT = [
+    '####################',
+    '#e................H#',
+    '#....gggg..........#',
+    '#....gggg.....N....#',
+    '#....gggg..........#',
+    '#.............SSSS.#',
+    '#.............SSSS.#',
+    '#..................#',
+    '#..gggggg..........#',
+    '#..gggggg..........#',
+    '#..................#',
+    '#..................#',
+    '#B..............rD.#',
+    '####################'
+  ];
+
+  const RIDGE = [
+    '####################',
+    '#e....gggg.........#',
+    '#......gggg...H....#',
+    '#......gggg........#',
+    '#..N...............#',
+    '#..........SSSS....#',
+    '#..........SSSS....#',
+    '#..................#',
+    '#gggg..............#',
+    '#gggg..............#',
+    '#..................#',
+    '#..................#',
+    '#B...............r.#',
     '####################'
   ];
 
@@ -132,11 +296,41 @@
       id: 'yard',
       name: 'Lumenfall Yard',
       wardenId: 'solm',
-      links: { D: null },
+      links: { D: 'marches' },
       levelMin: 3,
       levelMax: 5,
       encounters: ['brinember', 'kalflare', 'mortide', 'orumelt', 'veshcrag', 'pellslab', 'draygust', 'wynveil'],
       map: YARD
+    },
+    marches: {
+      id: 'marches',
+      name: 'Brine Marches',
+      wardenId: 'quorin',
+      links: { B: 'yard', D: 'cut' },
+      levelMin: 6,
+      levelMax: 9,
+      encounters: ['mortide', 'orumelt', 'nyxshade', 'nixadusk', 'virethorn'],
+      map: MARCHES
+    },
+    cut: {
+      id: 'cut',
+      name: 'Stratum Cut',
+      wardenId: 'grav',
+      links: { B: 'marches', D: 'ridge' },
+      levelMin: 9,
+      levelMax: 12,
+      encounters: ['veshcrag', 'pellslab', 'solmbloom', 'quinbolt', 'thurbolt'],
+      map: CUT
+    },
+    ridge: {
+      id: 'ridge',
+      name: 'Spark Ridge',
+      wardenId: 'odel',
+      links: { B: 'cut' },
+      levelMin: 12,
+      levelMax: 15,
+      encounters: ['myrrarc', 'sevflick', 'karuspore', 'vireblight', 'draygust'],
+      map: RIDGE
     }
   };
 
@@ -145,12 +339,53 @@
       id: 'solm',
       name: 'Warden Solm',
       sanctum: 'Sanctum of Cindersong',
-      intro: 'I keep the first Sanctum. If your Choir can answer heat and haste, the yard will remember you. If not, the grass is still there.',
-      win: 'The Sanctum hears you. Carry that answer. Do not waste it on silence.',
+      intro: 'I keep the first Sanctum. If your Choir can answer heat and haste, the yard will remember you. If not, the grass is still there. The east gate opens only after this phrase.',
+      win: 'The Sanctum hears you. The marches are past the east gate. Do not waste the song on silence.',
       loss: 'This is not the end of the song. It is only a missed phrase. The lamp by the wall will restore your Choir.',
+      rules: null,
       team: [
         { speciesId: 'kalflare', level: 7 },
         { speciesId: 'wynveil', level: 8 }
+      ]
+    },
+    quorin: {
+      id: 'quorin',
+      name: 'Warden Quorin',
+      sanctum: 'Sanctum of Brine',
+      intro: 'I keep the marches. This Sanctum hears only the Resonant you place forward. The rest of the Choir stays outside the phrase.',
+      win: 'One voice was enough. The cut past the east gate will test whether you can let a wounded song leave.',
+      loss: 'The bench was never going to save this phrase. Choose a stronger forward voice and return.',
+      rules: { lockSwitch: true },
+      team: [
+        { speciesId: 'orumelt', level: 10 },
+        { speciesId: 'nyxshade', level: 11 }
+      ]
+    },
+    grav: {
+      id: 'grav',
+      name: 'Warden Grav',
+      sanctum: 'Sanctum of Stratum',
+      intro: 'I keep the cut. My Resonants may withdraw while they can still sing. You do not get a quiet ending. You get the next voice.',
+      win: 'You let the withdrawal happen and still finished the phrase. The ridge is open.',
+      loss: 'Stone can leave a phrase and still win it. Rest at the lamp and come back.',
+      rules: { reliefAtHalf: true },
+      team: [
+        { speciesId: 'pellslab', level: 13 },
+        { speciesId: 'quinbolt', level: 14 }
+      ]
+    },
+    odel: {
+      id: 'odel',
+      name: 'Warden Odel',
+      sanctum: 'Sanctum of Spark',
+      intro: 'I keep the ridge. This Sanctum refuses any Motif whose Harmonic is not your forward Resonant\'s own. Bring a voice that can sing itself.',
+      win: 'Your own Harmonic held. Four Sanctums have an answer. The fracture is still wider than this ridge.',
+      loss: 'A borrowed Harmonic dies in this room. Attune a voice whose own song matches, then return.',
+      rules: { primaryLock: true },
+      team: [
+        { speciesId: 'myrrarc', level: 15 },
+        { speciesId: 'sevflick', level: 16 },
+        { speciesId: 'karuspore', level: 16 }
       ]
     }
   };
@@ -158,7 +393,7 @@
   const STRINGS = {
     title: 'Aetherwild',
     blurb: 'The Lumenfall is fracturing. Resonants are going quiet. You walk as an Attunement Surveyor and record what still sings.',
-    keeper: 'I keep the yard lamp. Deep grass hides wild Resonants. Attunement gives you three Hums: Low, Mid, or High, or the Harmonic their Ward spikes toward. A Kindling Motif loosens Guard further. Your Choir holds four. One more may wait in reserve. Warden Solm keeps the Sanctum south of here.',
+    keeper: 'I keep the yard lamp. Deep grass hides wild Resonants. Attunement gives you three Hums: Low, Mid, or High, or the Harmonic their Ward spikes toward. A Kindling Motif loosens Guard further. Your Choir holds four. One more may wait in reserve. Warden Solm keeps the Sanctum in the middle. After that phrase, the east gate opens onto the marches.',
     pathShut: 'The path beyond is not on this survey yet.',
     sanctumNeeds: 'Your Choir has no Vigor left to offer.',
     sanctumDone: 'This Sanctum is already answered. The Warden lets the gate stand open.',
@@ -173,7 +408,7 @@
       { id: 'sing', label: 'A silent world is already gone.', line: 'You: A world that cannot sing is already gone. I will keep recording.' },
       { id: 'reason', label: 'The fracture has a reason.', line: 'You: I will remember that the fracture has a reason. I still will not help you still the Choir.' }
     ],
-    winSlice: 'The Sanctum of Cindersong is answered. The yard keeps its song, for now.',
+    winSlice: 'The Sanctum is answered. The survey keeps its song, for now.',
     lossSlice: 'Your Choir falls silent. The survey is not over.'
   };
 

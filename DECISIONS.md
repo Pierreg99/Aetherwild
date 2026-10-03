@@ -10,13 +10,15 @@ This tree is a playable vertical slice of Aetherwild. It is not the full game de
 - The Harmonic chart is generated as a circulant: each Harmonic is strong against the next two, and weakness is the inverse. Every row has two strengths and two weaknesses.
 - Names are original compounds from a fixed syllable bank. Art is procedural canvas. No downloaded sprites. No runtime network.
 - Records stay in `localStorage`. A record that fails to parse is copied aside and is not required to be deleted before a new survey.
-- Choir size is 4, plus one reserve seat, because that was the slice contract.
+- Choir size is 4, plus one reserve seat, because that was the slice contract. The brief's Choir of 6 is still not the cap.
+- Nine Harmonics. The chart is a circulant over all nine: strong against the next two, weakness derived. Extending the cycle changed which pairs Stratum and Draft answer. That is intentional.
+- Eighteen Resonants and thirty-six Motifs. Four zones: Lumenfall Yard, Brine Marches, Stratum Cut, Spark Ridge. Four Sanctums with different trials: an open phrase, a forward-only phrase, withdrawal under half Vigor, and a phrase that refuses any Harmonic but the forward Resonant's own.
 
 ## Not built yet
 
-- The other five Harmonics, and the brief's narrative matchup names, which did not line up with the nine Harmonic names. The slice uses four Harmonics so the yard stays readable. The circulant will be extended, not hand-typed as a grid, when the rest arrive.
-- Index size 78, Motif count 120, nine three-stage lines, Ascension rules, Resonance gain up to the brief's cap of 50 (this slice caps at 20).
-- Biomes beyond Lumenfall Yard, the other seven Sanctums, distinct Sanctum trials, the Chorus, and the Prime Voice.
+- Index size 78 and Motif count 120. Sixty Resonants and eighty-four Motifs are still missing. No three-stage lines and no Ascension.
+- Level cap is 20, not 50.
+- Four Sanctums remain, including the Chorus and the Prime Voice. Five biomes from a set of nine are still absent.
 - A Resonance Vault larger than one reserve seat. Letting a hum go is permanent in this slice.
 - Secondary Harmonics, status phrases (Dimmed, Riven, Brambled, Scorched), stat stages, and Cadence-empty substitution beyond a hard refusal.
 - The brief's contradictory Ward line that reads the attacker's Ward. Incoming Ward from section 1.4 is what the slice multiplies.

@@ -27,7 +27,8 @@ There is no build step. `index.html` loads plain scripts. Use a local server bec
 - Attunement gives three Hums. A Harmonic name that matches the Ward spike, or the right pitch (Low, Mid, High), lowers Guard. A wrong Hum raises it. Kindling lowers it further. It is not a flat roll. If your forward Resonant is under a quarter of its Vigor, the wild Resonant slips away.
 - The Choir holds four Resonants. One more can wait in reserve.
 - The lamp tile restores Vigor and Cadence.
-- Warden Solm keeps the Sanctum of Cindersong. A win and a loss are both shown. After the first win, the Conductor speaks.
+- Warden Solm keeps the Sanctum in Lumenfall Yard. A win and a loss are both shown. After the first win, the Conductor speaks, and the east gate opens.
+- Brine Marches, Stratum Cut, and Spark Ridge follow. Each Sanctum is a different trial: only the forward Resonant, withdrawal under half Vigor, or a phrase that accepts only that Resonant's own Harmonic. West gates go back. East gates stay shut until the local Sanctum is answered.
 
 ## Check
 

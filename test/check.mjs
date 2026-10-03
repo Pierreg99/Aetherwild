@@ -145,6 +145,53 @@ assert(data.ZONES.yard.map.some((row) => row.includes('@')), 'spawn exists');
 assert(data.ZONES.yard.map.some((row) => row.includes('S')), 'sanctum exists');
 for (const slot of data.WARDENS.solm.team) assert(engine.species(slot.speciesId), 'warden species');
 
+assert(data.HARMONICS.length === 9, 'nine harmonics');
+assert(data.RESONANTS.length >= 18, 'expanded roster');
+assert(Object.keys(data.ZONES).length >= 4, 'four zones');
+assert(Object.keys(data.WARDENS).length >= 4, 'four sanctums');
+for (const zone of Object.values(data.ZONES)) {
+  const width = zone.map[0].length;
+  for (const row of zone.map) assert(row.length === width, zone.id + ' row width');
+  assert(zone.map.some((row) => row.includes('e') || row.includes('@')), zone.id + ' has an entry');
+  assert(data.WARDENS[zone.wardenId], zone.id + ' warden');
+  for (const dir of Object.keys(zone.links)) {
+    const dest = zone.links[dir];
+    if (!dest) continue;
+    assert(data.ZONES[dest], zone.id + ' link ' + dir);
+    const mark = dir === 'D' ? 'e' : 'r';
+    assert(data.ZONES[dest].map.some((row) => row.includes(mark)), dest + ' landing ' + mark);
+  }
+  for (const id of zone.encounters) assert(engine.species(id), zone.id + ' encounter ' + id);
+}
+for (const warden of Object.values(data.WARDENS)) {
+  assert(warden.team.length >= 2, warden.id + ' brings more than one');
+  for (const slot of warden.team) assert(engine.species(slot.speciesId), warden.id + ' species');
+}
+
+const locked = engine.freshSave('Surveyor', 'brinember', 11);
+locked.choir.push(engine.makeInstance(locked, 'mortide', 6));
+locked.choir[0].vigor = 1;
+const lockFoe = engine.makeInstance(locked, 'wynveil', 12);
+lockFoe.stats.tempo = 500;
+lockFoe.knownMotifs = ['gust-thread'];
+lockFoe.cadence['gust-thread'] = 14;
+const lockBattle = engine.createBattle([lockFoe], 'warden', 'quorin', { lockSwitch: true });
+engine.stepBattle(locked, lockBattle, { type: 'motif', motifId: locked.choir[0].knownMotifs[0] });
+assert(lockBattle.result === 'loss', 'locked sanctum does not call the bench');
+
+const refused = engine.freshSave('Surveyor', 'brinember', 13);
+refused.choir[0].stats.tempo = 500;
+refused.choir[0].knownMotifs = refused.choir[0].knownMotifs.concat(['tide-murmur']);
+refused.choir[0].cadence['tide-murmur'] = 14;
+const calm = engine.makeInstance(refused, 'veshcrag', 3);
+calm.stats.tempo = 1;
+calm.vigor = 80;
+const refuseBattle = engine.createBattle([calm], 'warden', 'odel', { primaryLock: true });
+const refuseLogs = engine.stepBattle(refused, refuseBattle, { type: 'motif', motifId: 'tide-murmur' });
+assert(refuseLogs.some((line) => line.indexOf('refuses') !== -1), 'sanctum refuses another harmonic');
+assert(calm.vigor === 80, 'refused motif deals no vigor loss');
+
+
 console.log('resonants: ' + data.RESONANTS.length);
 console.log('assertions passed: ' + passed);
 console.log('assertions failed: ' + failed);

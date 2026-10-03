@@ -41,6 +41,9 @@
     else if (plan === 'geomorphic') mesa(ctx, size, pal);
     else if (plan === 'lattice') lattice(ctx, size, pal);
     else if (plan === 'filament') filament(ctx, size, pal, r);
+    else if (plan === 'bloom') bloom(ctx, size, pal);
+    else if (plan === 'porous') porous(ctx, size, pal);
+    else if (plan === 'colonial') colonial(ctx, size, pal);
     else coil(ctx, size, pal);
     ctx.restore();
   }
@@ -199,10 +202,57 @@
       ctx.arc(x + 8, y + 6, 3, 0, Math.PI * 2);
       ctx.fill();
       ctx.fillRect(x + 6, y + 9, 4, 5);
-    } else if (ch === 'D') {
+    } else if (ch === 'D' || ch === 'B') {
       ctx.strokeStyle = '#e6c56e';
       ctx.strokeRect(x + 3.5, y + 3.5, 9, 10);
+    } else if (ch === 'e' || ch === 'r') {
+      ctx.fillStyle = '#1c3a30';
+      ctx.fillRect(x, y, tile, tile);
+      ctx.fillStyle = '#e6c56e';
+      ctx.fillRect(x + 7, y + 7, 2, 2);
     }
+  }
+
+  function bloom(ctx, s, pal) {
+    ctx.fillStyle = pal[0];
+    for (let i = 0; i < 6; i++) {
+      ctx.save();
+      ctx.rotate(i * Math.PI / 3);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(s * 0.12, -s * 0.16);
+      ctx.lineTo(0, -s * 0.42);
+      ctx.lineTo(-s * 0.12, -s * 0.16);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = pal[3];
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function porous(ctx, s, pal) {
+    ctx.fillStyle = pal[0];
+    ctx.beginPath();
+    ctx.arc(0, 0, s * 0.34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = pal[2];
+    ctx.beginPath();
+    ctx.arc(-s * 0.1, -s * 0.06, s * 0.07, 0, Math.PI * 2);
+    ctx.arc(s * 0.1, s * 0.08, s * 0.05, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function colonial(ctx, s, pal) {
+    const spots = [[0, 0], [-0.22, 0.05], [0.18, 0.08], [0.02, -0.22], [-0.08, 0.22]];
+    spots.forEach(function (spot, i) {
+      ctx.fillStyle = i === 0 ? pal[1] : pal[0];
+      ctx.beginPath();
+      ctx.arc(spot[0] * s, spot[1] * s, s * (i === 0 ? 0.16 : 0.1), 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
 
   function drawSurveyor(ctx, x, y, time) {

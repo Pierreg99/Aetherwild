@@ -133,7 +133,7 @@
     if (t === '#' || t === '~') return;
     if (t === 'N') { talkKeeper(); return; }
     if (t === 'S') { openSanctum(); return; }
-    if (t === 'D') { openDoor(zone); return; }
+    if (t === 'D' || t === 'B') { openGate(zone, t); return; }
     save.x = nx;
     save.y = ny;
     if (t === 'H') {
@@ -156,7 +156,7 @@
     const t = tileAt(zone, save.x + facing.x, save.y + facing.y);
     if (t === 'N') talkKeeper();
     else if (t === 'S') openSanctum();
-    else if (t === 'D') openDoor(zone);
+    else if (t === 'D' || t === 'B') openGate(zone, t);
     else if (t === 'H') {
       E.healChoir(save);
       pushLog(A.STRINGS.healed);
@@ -173,18 +173,19 @@
     dockSig = '';
   }
 
-  function openDoor(zone) {
-    const dest = zone.links && zone.links.D;
+  function openGate(zone, dir) {
+    const dest = zone.links && zone.links[dir];
     if (!dest || !A.ZONES[dest]) {
       pushLog(A.STRINGS.pathShut);
       return;
     }
-    if (!save.flags.sanctums[zone.wardenId]) {
+    if (dir === 'D' && zone.wardenId && !save.flags.sanctums[zone.wardenId]) {
       pushLog('The far gate stays shut until this Sanctum is answered.');
       return;
     }
     save.zone = dest;
-    const land = E.findSpawn(A.ZONES[dest], 'e');
+    const mark = dir === 'D' ? 'e' : 'r';
+    const land = E.findSpawn(A.ZONES[dest], mark);
     save.x = land.x;
     save.y = land.y;
     save.grace = 2;
@@ -240,10 +241,13 @@
       return E.makeInstance(save, slot.speciesId, slot.level);
     });
     foes.forEach(function (f) { E.see(save, f.speciesId, false); });
-    battle = E.createBattle(foes, 'warden', w.id);
+    battle = E.createBattle(foes, 'warden', w.id, w.rules || null);
     submenu = '';
     logLines = [];
     pushLog(w.sanctum + '. ' + w.name + ' brings ' + foes.length + ' Resonants.');
+    if (w.rules && w.rules.lockSwitch) pushLog('Only the forward Resonant may sing.');
+    if (w.rules && w.rules.reliefAtHalf) pushLog('A wounded Resonant may withdraw.');
+    if (w.rules && w.rules.primaryLock) pushLog('This Sanctum hears only your own Harmonic.');
     screen = 'battle';
     dockSig = '';
   }
@@ -261,19 +265,20 @@
     if (!battle) { screen = 'world'; return; }
     const result = battle.result;
     const kind = battle.kind;
+    const wardenId = battle.wardenId;
     battle = null;
     submenu = '';
     overflowInst = null;
     save.grace = 3;
     if (result === 'win' && kind === 'warden' && !save.flags.conductorHeard) {
       E.healChoir(save);
-      openConductor();
+      openConductor(A.WARDENS[wardenId] ? A.WARDENS[wardenId].win : A.STRINGS.winSlice);
       return;
     }
     if (result === 'win' && kind === 'warden') {
       E.healChoir(save);
-      pushLog(A.STRINGS.winSlice);
-      save.storyBeat = 'yard-clear';
+      pushLog(A.WARDENS[wardenId] ? A.WARDENS[wardenId].win : A.STRINGS.winSlice);
+      save.storyBeat = 'sanctum-cleared';
     }
     if (result === 'loss') {
       pushLog(A.STRINGS.lossSlice);
@@ -287,7 +292,7 @@
     dockSig = '';
   }
 
-  function openConductor() {
+  function openConductor(afterLine) {
     dialogue = {
       lines: A.STRINGS.conductor.slice(),
       index: 0,
@@ -296,7 +301,7 @@
         save.flags.conductorHeard = true;
         save.storyBeat = 'conductor';
         pushLog(choice.line);
-        pushLog(A.STRINGS.winSlice);
+        pushLog(afterLine || A.STRINGS.winSlice);
         dialogue = null;
         persist();
         screen = 'world';
