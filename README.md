@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="./assets/readme-banner.svg" alt="Aetherwild" width="100%">
+
 # Aetherwild
 
 <p><strong>Aetherwild: Kreaturen-Sammel-RPG im Browser mit eigener Welt.</strong></p>
@@ -11,10 +13,38 @@
 <p><a href="#schnellstart">Schnellstart</a> · <a href="#projektstruktur">Projektstruktur</a> · <a href="#english-summary">English</a></p>
 </div>
 
+<table>
+<tr>
+<td width="58%" valign="top">
+
+### Bestand
+
+Aetherwild: browser creature-collection RPG. Original world, no borrowed creature names.
+
+Der Default-Branch `main` ist die Fläche, die zählt. Was nicht in diesem Baum liegt, ist kein Feature dieses Repos.
+
+</td>
+<td width="42%" valign="top">
+
+### Fakten
+
+| Feld | Wert |
+| --- | --- |
+| Owner | Pierreg99 |
+| Branch | `main` |
+| Sichtbarkeit | öffentlich |
+| Sprache | JavaScript |
+| Archiv | nein |
+
+</td>
+</tr>
+</table>
+
 ---
 
 ## Inhaltsverzeichnis
 
+- [Bestand und Fakten](#bestand)
 - [Überblick](#überblick)
 - [Features](#features)
 - [Schnellstart](#schnellstart)
@@ -32,7 +62,7 @@ Aetherwild: Kreaturen-Sammel-RPG im Browser mit eigener Welt.
 | Merkmal | Wert |
 | --- | --- |
 | Sprachen | JavaScript (99%) |
-| Dateien im Repository | 13 |
+| Dateien im Repository | 14 |
 | Einstiegspunkte | `index.html` |
 | Lizenz | [LICENSE](LICENSE) |
 
@@ -61,8 +91,9 @@ Das Projekt benötigt keinen Build-Schritt: `index.html` direkt im Browser öffn
 flowchart LR
     R(["Aetherwild"])
     R --> D0["js/<br/>5 Dateien"]
-    R --> D1["css/<br/>1 Datei"]
-    R --> D2["test/<br/>1 Datei"]
+    R --> D1["assets/<br/>1 Datei"]
+    R --> D2["css/<br/>1 Datei"]
+    R --> D3["test/<br/>1 Datei"]
     E{{"Einstieg: index.html"}}
     E -.-> R
 ```
@@ -71,6 +102,8 @@ flowchart LR
 
 ```text
 Aetherwild/
+├── assets/  (1 Datei)
+│   └── readme-banner.svg
 ├── css/  (1 Datei)
 │   └── game.css
 ├── js/  (5 Dateien)
