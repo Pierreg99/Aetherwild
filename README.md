@@ -4,12 +4,13 @@
 
 # Aetherwild
 
-Aetherwild: browser creature-collection RPG. Original world, no borrowed creature names.
-
-[![branch](https://img.shields.io/badge/branch-main-7EB8C9?style=flat-square)](https://github.com/Pierreg99/Aetherwild)
-[![sichtbarkeit](https://img.shields.io/badge/sichtbarkeit-öffentlich-141414?style=flat-square&labelColor=0A0A0A)](https://github.com/Pierreg99/Aetherwild)
-[![sprache](https://img.shields.io/badge/sprache-JavaScript-2A2A28?style=flat-square&labelColor=0A0A0A)](https://github.com/Pierreg99/Aetherwild)
-
+<p><strong>Aetherwild: Kreaturen-Sammel-RPG im Browser mit eigener Welt.</strong></p>
+<p>
+<img alt="JavaScript: 99%" src="https://img.shields.io/badge/JavaScript-99%25-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white">
+<img alt="Lizenz: MIT" src="https://img.shields.io/badge/Lizenz-MIT-2E7D32?style=for-the-badge">
+<img alt="Sichtbarkeit: Öffentlich" src="https://img.shields.io/badge/Sichtbarkeit-%C3%96ffentlich-0B7285?style=for-the-badge">
+</p>
+<p><a href="#schnellstart">Schnellstart</a> · <a href="#projektstruktur">Projektstruktur</a> · <a href="#english-summary">English</a></p>
 </div>
 
 <table>
@@ -39,23 +40,96 @@ Der Default-Branch `main` ist die Fläche, die zählt. Was nicht in diesem Baum 
 </tr>
 </table>
 
-## Lesen
+---
 
-1. Default-Branch öffnen.
-2. Nur Dateien in diesem Baum als Beleg nehmen.
-3. Issues und Diskussionen nur nutzen, wenn sie im Repo eingeschaltet sind.
+## Inhaltsverzeichnis
 
-## Grenze
+- [Bestand und Fakten](#bestand)
+- [Überblick](#überblick)
+- [Features](#features)
+- [Schnellstart](#schnellstart)
+- [Architektur](#architektur)
+- [Projektstruktur](#projektstruktur)
+- [Dokumentation](#dokumentation)
+- [Projektdetails](#projektdetails)
+- [English summary](#english-summary)
+- [Lizenzhinweis](#lizenzhinweis)
 
-Keine Qualitätszahl, kein Paketstand und keine Runtime, die nicht als Datei in diesem Repo steht.
+## Überblick
 
-<p align="center"><sub>Fläche nach Cryo Core Lite v1.5 · Tokens #0A0A0A / #141414 / #7EB8C9</sub></p>
+Aetherwild: Kreaturen-Sammel-RPG im Browser mit eigener Welt.
 
+| Merkmal | Wert |
+| --- | --- |
+| Sprachen | JavaScript (99%) |
+| Dateien im Repository | 14 |
+| Einstiegspunkte | `index.html` |
+| Lizenz | [LICENSE](LICENSE) |
 
-<details>
-<summary>Bisheriger README-Text</summary>
+## Features
 
-# Aetherwild
+- Canvas-2D-Rendering
+- Klangerzeugung über die Web Audio API
+- Lokale Speicherung im Browser (localStorage)
+- Echtzeit-Render-Schleife (requestAnimationFrame)
+- 1 Testdatei im Repository
+
+## Schnellstart
+
+```bash
+git clone https://github.com/Pierreg99/Aetherwild.git
+cd Aetherwild
+```
+
+Das Projekt benötigt keinen Build-Schritt: `index.html` direkt im Browser öffnen.
+
+## Architektur
+
+Übersicht der wichtigsten Verzeichnisse nach Anzahl der enthaltenen Dateien.
+
+```mermaid
+flowchart LR
+    R(["Aetherwild"])
+    R --> D0["js/<br/>5 Dateien"]
+    R --> D1["assets/<br/>1 Datei"]
+    R --> D2["css/<br/>1 Datei"]
+    R --> D3["test/<br/>1 Datei"]
+    E{{"Einstieg: index.html"}}
+    E -.-> R
+```
+
+## Projektstruktur
+
+```text
+Aetherwild/
+├── assets/  (1 Datei)
+│   └── readme-banner.svg
+├── css/  (1 Datei)
+│   └── game.css
+├── js/  (5 Dateien)
+│   ├── art.js
+│   ├── audio.js
+│   ├── data.js
+│   ├── engine.js
+│   └── game.js
+├── test/  (1 Datei)
+│   └── check.mjs
+├── .gitignore
+├── DECISIONS.md
+├── index.html
+├── LICENSE
+├── PROGRESS.md
+└── README.md
+```
+
+## Dokumentation
+
+- [DECISIONS.md](DECISIONS.md)
+- [PROGRESS.md](PROGRESS.md)
+
+## Projektdetails
+
+Der folgende Abschnitt übernimmt die bisherige Projektdokumentation.
 
 A browser survey of the Lumenfall. Resonants are living shards of a dead star. You are an Attunement Surveyor. This repository is a playable slice, not the finished eight-Sanctum game. See `DECISIONS.md` for what is still open.
 
@@ -90,7 +164,6 @@ There is no build step. `index.html` loads plain scripts. Use a local server bec
 - A wild encounter, a cleared Sanctum, and the Prime Voice ending each play a short generated phrase. There is no downloaded audio.
 - After all eight Sanctums, the foundry's east gate opens Chorus Hall. Four voices answer in order. The lamp in the hall restores your Choir between them. When the four are quiet, the dais calls the Prime Voice. Winning that phrase ends the survey.
 
-
 Brinember, Mortide, and Veshcrag can ascend after Choir level 16 and Resonance 120, if their extra condition is met: a bond peak, five Kindling Motifs, or never having gone quiet. Tindflare, Lumtide, and Oskslab can ascend again at level 32 and Resonance 180 under the same kinds of condition. The Index shows those lines as unwritten until then. Levels stop at 50.
 
 Share record copies the survey as text. Read record accepts that text back. A bad record is refused and the current survey stays.
@@ -105,4 +178,12 @@ node test/check.mjs
 
 MIT. Art is drawn on the canvas from seeds in `js/data.js`. The game does not fetch fonts, images, or trackers.
 
-</details>
+## English summary
+
+Aetherwild: browser creature-collection RPG with an original world.
+
+Clone the repository and follow the commands in [Schnellstart](#schnellstart); the [project layout](#projektstruktur) shows where the code lives. Further documents are listed under [Dokumentation](#dokumentation).
+
+## Lizenzhinweis
+
+Siehe [LICENSE](LICENSE).
